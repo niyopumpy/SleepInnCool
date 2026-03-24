@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SleepInn & Cool — Book Your Room</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>
+:root{--gold:#C9A84C;--gold-light:#E8C97A;--ink:#0D0D0D;--ink2:#111108;--cream:#FAF7F2;--muted:#6B6457;--border:rgba(201,168,76,0.25);--border2:rgba(255,255,255,0.08);--radius:4px;--radius-lg:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--cream);min-height:100vh;overflow-x:hidden}
+.sync-bar{position:fixed;top:0;left:0;right:0;z-index:500;height:3px}
+.sync-bar.loading{background:linear-gradient(90deg,transparent 0%,var(--gold) 50%,transparent 100%);background-size:200% 100%;animation:sweep 1.2s infinite}
+@keyframes sweep{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.sync-toast{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:var(--ink2);border:0.5px solid var(--gold);color:var(--cream);padding:7px 14px;border-radius:6px;font-size:11px;z-index:501;display:none;align-items:center;gap:8px;white-space:nowrap}
+.sync-toast.show{display:flex}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 60px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(201,168,76,0.12) 0%,transparent 60%),linear-gradient(180deg,#0D0D0D 0%,#1a1408 40%,#0D0D0D 100%);z-index:0}
+.hero-pattern{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(201,168,76,0.04) 39px,rgba(201,168,76,0.04) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(201,168,76,0.04) 39px,rgba(201,168,76,0.04) 40px);z-index:0}
+.hotel-crown{text-align:center;padding:60px 24px 40px;position:relative;z-index:1}
+.crown-line{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 24px}
+.hotel-eyebrow{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.hotel-name{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,10vw,56px);font-weight:600;line-height:1.05;color:var(--cream);margin-bottom:8px}
+.hotel-name span{color:var(--gold)}
+.hotel-tagline{font-size:13px;color:var(--muted);letter-spacing:1px;margin-bottom:32px}
+.hero-content{position:relative;z-index:1;padding:0 24px;max-width:520px;margin:0 auto;width:100%}
+.hero-divider{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+.hero-divider::before,.hero-divider::after{content:'';flex:1;height:0.5px;background:var(--border)}
+.hero-divider-gem{width:6px;height:6px;background:var(--gold);transform:rotate(45deg)}
+.scroll-hint{text-align:center;position:relative;z-index:1;padding:0 24px 20px;margin-top:40px}
+.scroll-hint p{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.scroll-arrow{width:20px;height:20px;border-right:1px solid var(--gold);border-bottom:1px solid var(--gold);transform:rotate(45deg);margin:0 auto;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(6px)}}
+.section{padding:60px 24px;max-width:520px;margin:0 auto}
+.section-label{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:var(--cream);margin-bottom:32px}
+.type-divider{display:flex;align-items:center;gap:12px;margin:32px 0 20px}
+.type-divider::before,.type-divider::after{content:'';flex:1;height:0.5px;background:var(--border)}
+.type-divider-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.room-card{border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:20px;transition:border-color 0.3s;animation:fadeUp 0.5s both}
+.room-card:hover{border-color:var(--gold)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.room-visual{height:140px;position:relative;display:flex;align-items:flex-end;padding:14px}
+.room-club-badge{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.7);border:0.5px solid var(--gold);color:var(--gold);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px}
+.room-status-badge{position:absolute;top:12px;right:12px;font-size:10px;padding:4px 10px;border-radius:2px;font-weight:500;letter-spacing:1px;text-transform:uppercase}
+.status-available{background:rgba(25,135,84,0.9);color:#fff}.status-occupied{background:rgba(220,53,69,0.9);color:#fff}
+.room-body{padding:18px;background:#111108}
+.room-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--cream);margin-bottom:4px}
+.room-type-tag{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.room-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.room-meta{display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.room-meta-item{font-size:11px;color:var(--muted)}.room-meta-item strong{display:block;color:var(--cream);font-size:12px;margin-bottom:1px;font-weight:500}
+.room-footer{display:flex;align-items:center;justify-content:space-between;border-top:0.5px solid var(--border);padding-top:14px}
+.room-price{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--gold)}
+.room-price span{font-size:12px;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:400;margin-left:2px}
+.room-actions{display:flex;gap:8px}
+.btn{padding:10px 20px;border-radius:var(--radius);border:none;cursor:pointer;font-size:12px;font-weight:500;letter-spacing:1px;text-transform:uppercase;transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.btn-gold{background:var(--gold);color:var(--ink)}.btn-gold:hover{background:var(--gold-light)}.btn-gold:disabled{background:#444;color:#777;cursor:not-allowed}
+.btn-outline{background:transparent;border:0.5px solid var(--gold);color:var(--gold)}.btn-outline:hover{background:rgba(201,168,76,0.1)}
+.btn-ghost{background:transparent;border:0.5px solid rgba(255,255,255,0.15);color:var(--muted)}.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn-full{width:100%;padding:14px;font-size:13px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;align-items:flex-end;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:#111108;border:0.5px solid var(--border);border-radius:20px 20px 0 0;padding:28px 24px 40px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
+.modal-handle{width:36px;height:3px;background:#333;border-radius:2px;margin:0 auto 20px}
+.modal-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--cream)}
+.modal-subtitle{font-size:12px;color:var(--muted);margin-top:3px}
+.close-btn{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;padding:0}.close-btn:hover{color:var(--cream)}
+.step-bar{display:flex;gap:4px;margin-bottom:24px}
+.step-pip{flex:1;height:2px;background:#2a2a2a;border-radius:1px;transition:background 0.3s}.step-pip.done{background:var(--gold)}
+.form-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+.form-input{width:100%;padding:12px 14px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.1);border-radius:var(--radius);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:14px;margin-bottom:16px;transition:border-color 0.2s}
+.form-input:focus{outline:none;border-color:var(--gold)}.form-input::placeholder{color:#555}
+select.form-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236B6457'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.summary-box{background:rgba(201,168,76,0.05);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:20px}
+.summary-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;font-size:13px;border-bottom:0.5px solid rgba(255,255,255,0.05)}
+.summary-row:last-child{border:none}.summary-row .key{color:var(--muted)}.summary-row .val{color:var(--cream);font-weight:500}
+.summary-row.total .val{color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700}
+.bank-box{background:rgba(255,255,255,0.03);border:0.5px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:14px;margin-bottom:20px;font-size:13px;line-height:1.9}
+.bank-box strong{color:var(--cream)}.bank-box span{color:var(--muted)}.bank-ref{font-family:monospace;color:var(--gold);font-size:15px;letter-spacing:1px}
+.alert{padding:12px 14px;border-radius:var(--radius);font-size:13px;margin-bottom:16px;line-height:1.6}
+.alert-warning{background:rgba(201,168,76,0.1);border:0.5px solid var(--border);color:var(--gold-light)}
+.alert-error{background:rgba(220,53,69,0.15);border:0.5px solid rgba(220,53,69,0.4);color:#f87c7c}
+.btn-row{display:flex;gap:10px;margin-top:8px}.btn-row .btn{flex:1}
+.success-screen{text-align:center;padding:20px 0}
+.success-icon{width:64px;height:64px;background:rgba(25,135,84,0.15);border:1px solid rgba(25,135,84,0.4);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--cream);margin-bottom:8px}
+.success-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6}
+.qr-wrap{border:1px dashed var(--border);border-radius:var(--radius-lg);padding:24px;text-align:center;margin-bottom:20px}
+.qr-inner{width:180px;height:180px;margin:0 auto 14px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink2);border:0.5px solid var(--gold);color:var(--cream);padding:12px 20px;border-radius:8px;font-size:13px;z-index:300;transition:transform 0.3s;max-width:90vw}
+.toast.show{transform:translateX(-50%) translateY(0)}
+footer{text-align:center;padding:40px 24px;border-top:0.5px solid var(--border);font-size:12px;color:var(--muted)}
+footer strong{color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="sync-bar" id="sync-bar"></div>
+<div class="sync-toast" id="sync-toast"><div class="sync-dot"></div><span id="sync-msg">Syncing…</span></div>
+
+<div class="hero">
+  <div class="hero-bg"></div><div class="hero-pattern"></div>
+  <div class="hotel-crown">
+    <div class="hotel-eyebrow">Hospitality · Excellence · Comfort</div>
+    <h1 class="hotel-name">SleepInn <span>&</span> Cool</h1>
+    <p class="hotel-tagline" id="hero-tagline">Your rest is our pride</p>
+    <div class="crown-line"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-divider"><div class="hero-divider-gem"></div></div>
+    <p style="font-size:14px;color:var(--muted);text-align:center;line-height:1.7">Five distinctive rooms — from overnight lodging to short rest —<br>each named for the beautiful game.</p>
+  </div>
+  <div class="scroll-hint"><p>Explore Rooms</p><div class="scroll-arrow"></div></div>
+</div>
+
+<div class="section">
+  <p class="section-label">Accommodation</p>
+  <h2 class="section-title" id="section-headline">Choose Your Room</h2>
+  <div id="rooms-loading" style="text-align:center;padding:40px 0;color:var(--muted);font-size:13px">⏳ Loading rooms…</div>
+  <div id="lodging-wrap" style="display:none">
+    <div class="type-divider"><div class="type-divider-label">🌙 Lodging Rooms — Overnight Stay</div></div>
+    <div id="lodging-rooms"></div>
+  </div>
+  <div id="shortrest-wrap" style="display:none">
+    <div class="type-divider"><div class="type-divider-label">⏱ Short-Rest Rooms — Quick Refresh</div></div>
+    <div id="shortrest-rooms"></div>
+  </div>
+</div>
+
+<footer>
+  <strong id="footer-name">SleepInn & Cool Hotel</strong><br>
+  Enquiries: <strong id="footer-phone">+234 800 000 0000</strong><br>
+  <span style="margin-top:8px;display:block">© 2025 SleepInn & Cool. All rights reserved.</span>
+</footer>
+
+<!-- BOOKING MODAL -->
+<div class="overlay" id="booking-overlay">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div><div class="modal-title" id="modal-room-name">Book Room</div><div class="modal-subtitle" id="modal-room-type"></div></div>
+      <button class="close-btn" onclick="closeModal('booking-overlay')">✕</button>
+    </div>
+    <div class="step-bar"><div class="step-pip done" id="pip1"></div><div class="step-pip" id="pip2"></div><div class="step-pip" id="pip3"></div><div class="step-pip" id="pip4"></div></div>
+    <div id="step-1">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:20px">Enter your details to begin your reservation.</p>
+      <label class="form-label">Full Name</label><input class="form-input" id="g-name" placeholder="e.g. Emeka Okonkwo">
+      <label class="form-label">Phone Number</label><input class="form-input" id="g-phone" placeholder="e.g. 08012345678" type="tel">
+      <label class="form-label">Email (optional)</label><input class="form-input" id="g-email" placeholder="email@example.com" type="email">
+      <div id="step1-error" class="alert alert-error" style="display:none"></div>
+      <button class="btn btn-gold btn-full" onclick="goStep2()">Continue →</button>
+    </div>
+    <div id="step-2" style="display:none">
+      <div id="step2-fields"></div>
+      <div id="step2-error" class="alert alert-error" style="display:none"></div>
+      <div class="btn-row"><button class="btn btn-ghost" onclick="goStep(1)">← Back</button><button class="btn btn-gold" style="flex:2" onclick="goStep3()">Review →</button></div>
+    </div>
+    <div id="step-3" style="display:none">
+      <div class="summary-box" id="booking-summary"></div>
+      <div class="alert alert-warning" id="reservation-notice">💳 <strong>Payment by Bank Transfer</strong><br>After confirming, you'll receive bank details and a unique reference code. Your room is reserved for <strong>2 hours</strong> pending payment confirmation.</div>
+      <div id="step3-error" class="alert alert-error" style="display:none"></div>
+      <div class="btn-row"><button class="btn btn-ghost" onclick="goStep(2)">← Back</button><button class="btn btn-gold" style="flex:2" id="confirm-btn" onclick="confirmBooking()">Confirm Reservation →</button></div>
+    </div>
+    <div id="step-4" style="display:none">
+      <div class="success-screen">
+        <div class="success-icon">✓</div>
+        <h2 class="success-title">Room Reserved!</h2>
+        <p class="success-sub" id="success-sub-msg">Please complete payment to secure your room.</p>
+        <div class="bank-box" style="text-align:left">
+          <div style="margin-bottom:10px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">Bank Transfer Details</div>
+          <strong id="suc-accname">SleepInn & Cool Hotel</strong><br>
+          <span>Bank: </span><strong id="suc-bank">First Bank of Nigeria</strong><br>
+          <span>Account: </span><strong id="suc-accno">3012345678</strong><br>
+          <span>Amount: </span><strong id="success-amount" style="color:var(--gold)"></strong><br>
+          <span>Reference: </span><strong class="bank-ref" id="success-ref"></strong><br>
+          <div style="margin-top:10px;font-size:11px;color:var(--muted);border-top:0.5px solid rgba(255,255,255,0.06);padding-top:10px">
+            ⚠ Use your booking reference as payment narration. Send receipt to <strong id="suc-phone">+234 800 000 0000</strong> (WhatsApp) for quick confirmation.
+          </div>
+        </div>
+        <div class="summary-box" id="success-summary"></div>
+        <button class="btn btn-outline btn-full" onclick="closeModal('booking-overlay');loadData()">← Back to Rooms</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QR MODAL -->
+<div class="overlay" id="qr-overlay">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div><div class="modal-title" id="qr-room-title">Room QR Code</div><div class="modal-subtitle">Scan to book this room</div></div>
+      <button class="close-btn" onclick="closeModal('qr-overlay')">✕</button>
+    </div>
+    <div class="qr-wrap">
+      <div class="qr-inner" id="qr-box"></div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--cream);margin-bottom:4px" id="qr-display-name"></div>
+      <div style="font-size:11px;color:var(--muted)">Scan with phone camera to book</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px;word-break:break-all" id="qr-display-link"></div>
+    </div>
+    <button class="btn btn-gold btn-full" onclick="printQR()">Print / Save QR Code</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// CLOUD CONFIG — fill these in after JSONBin signup
+// ═══════════════════════════════════════════════════
+const JSONBIN_BIN_ID  = '69c284a3b7ec241ddc9ae42d';
+const JSONBIN_API_KEY = '$2a$10$y.PWFFjVKUj/1SJSyqqdDuTEpAu6jyB/uTAOfCERnolhrudydJsvS';
+// Same values must be pasted in dashboard.html too!
+
+const BIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+const POLL_MS  = 20000;
+
+const ROOMS_DEFAULT = [
+  {id:'manchester-united',name:'Manchester United',type:'lodging',  price:15000,duration:'Per Night',  checkIn:'2:00 PM',   checkOut:'12:00 PM',  desc:'A richly appointed lodging room radiating the spirit of champions. King-sized bed, climate control, en-suite bathroom, and premium toiletries.',color:'#8B0000',accent:'#cc0000',emoji:'⚽'},
+  {id:'barcelona',        name:'Barcelona',        type:'lodging',  price:18000,duration:'Per Night',  checkIn:'2:00 PM',   checkOut:'12:00 PM',  desc:'Elegant and modern — artistry and flair. Deluxe bed, workspace, and city-facing window.',                                                     color:'#004499',accent:'#0055cc',emoji:'🔵'},
+  {id:'liverpool',        name:'Liverpool',        type:'lodging',  price:14000,duration:'Per Night',  checkIn:'2:00 PM',   checkOut:'12:00 PM',  desc:'Warm and welcoming lodge room with en-suite shower, smart TV, and complimentary breakfast for one.',                                          color:'#8B0015',accent:'#c8102e',emoji:'🔴'},
+  {id:'chelsea',          name:'Chelsea',          type:'shortrest',price:5000, duration:'Per 3 Hours',checkIn:'On Arrival',checkOut:'3 hrs later',desc:'Clean private short-rest suite — perfect for a quick refresh, power nap, or midday break. Includes shower and towels.',                      color:'#003399',accent:'#034694',emoji:'💙'},
+  {id:'arsenal',          name:'Arsenal',          type:'shortrest',price:4500, duration:'Per 3 Hours',checkIn:'On Arrival',checkOut:'3 hrs later',desc:'Compact and comfortable short-rest room with private bathroom, fresh linens, and full privacy.',                                             color:'#8B1500',accent:'#EF0107',emoji:'🔺'}
+];
+const SETTINGS_DEFAULT = {
+  tagline:'Your rest is our pride',headline:'Choose Your Room',
+  hotelName:'SleepInn & Cool Hotel',bankName:'First Bank of Nigeria',
+  accountNo:'3012345678',accountName:'SleepInn & Cool Hotel',
+  phone:'+234 800 000 0000',
+  reservationNotice:'💳 <strong>Payment by Bank Transfer</strong><br>After confirming, you\'ll receive our bank details and a unique reference code. Your room is reserved for <strong>2 hours</strong> pending payment confirmation.',
+  reservationHoldHours:2
+};
+
+let rooms=ROOMS_DEFAULT.map(r=>({...r})),bookings=[],settings={...SETTINGS_DEFAULT};
+let selectedRoom=null,bookingDraft={},pollTimer=null;
+
+const configured=()=>JSONBIN_BIN_ID!=='PASTE_YOUR_BIN_ID_HERE'&&JSONBIN_API_KEY!=='PASTE_YOUR_API_KEY_HERE';
+
+function setSyncing(on,msg=''){
+  document.getElementById('sync-bar').className=on?'sync-bar loading':'sync-bar';
+  const st=document.getElementById('sync-toast');
+  if(on&&msg){document.getElementById('sync-msg').textContent=msg;st.classList.add('show');}
+  else st.classList.remove('show');
+}
+
+async function cloudGet(){
+  const r=await fetch(BIN_URL+'/latest',{headers:{'X-Master-Key':JSONBIN_API_KEY,'X-Bin-Meta':'false'}});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return r.json();
+}
+async function cloudPut(data){
+  await fetch(BIN_URL,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':JSONBIN_API_KEY},body:JSON.stringify(data)});
+}
+
+async function loadData(){
+  if(!configured()){
+    // localStorage fallback (same device only — shows setup warning)
+    const lr=localStorage.getItem('sic_rooms'),lb=localStorage.getItem('sic_bookings'),ls=localStorage.getItem('sic_settings');
+    if(lr)rooms=JSON.parse(lr); if(lb)bookings=JSON.parse(lb); if(ls)settings={...SETTINGS_DEFAULT,...JSON.parse(ls)};
+    renderRooms();applySettings();
+    showToast('⚠ Cloud not set up — data is device-local only');
+    return;
+  }
+  setSyncing(true,'Loading…');
+  try{
+    const data=await cloudGet();
+    if(data.rooms?.length)rooms=data.rooms;
+    if(data.bookings)bookings=data.bookings;
+    if(data.settings&&Object.keys(data.settings).length)settings={...SETTINGS_DEFAULT,...data.settings};
+    if(!data.rooms?.length)await cloudPut({rooms,bookings,settings,schemaVersion:1});
+  }catch(e){showToast('Network error — showing cached data');}
+  setSyncing(false);renderRooms();applySettings();
+  startPolling();
+}
+
+async function saveData(){
+  if(!configured()){localStorage.setItem('sic_rooms',JSON.stringify(rooms));localStorage.setItem('sic_bookings',JSON.stringify(bookings));localStorage.setItem('sic_settings',JSON.stringify(settings));return;}
+  await cloudPut({rooms,bookings,settings,schemaVersion:1});
+}
+
+function startPolling(){
+  if(pollTimer)clearInterval(pollTimer);
+  pollTimer=setInterval(async()=>{
+    if(!configured())return;
+    try{const d=await cloudGet();if(d.rooms?.length)rooms=d.rooms;if(d.bookings)bookings=d.bookings;if(d.settings&&Object.keys(d.settings).length)settings={...SETTINGS_DEFAULT,...d.settings};renderRooms();applySettings();}catch(e){}
+  },POLL_MS);
+}
+
+function getActiveBooking(roomId){const now=Date.now();return bookings.find(b=>b.roomId===roomId&&b.status==='confirmed'&&b.checkoutTime>now);}
+function genRef(){return 'SIC'+Date.now().toString().slice(-8).toUpperCase();}
+function fmtNaira(n){return '₦'+Number(n).toLocaleString();}
+
+function applySettings(){
+  document.getElementById('hero-tagline').textContent=settings.tagline||SETTINGS_DEFAULT.tagline;
+  document.getElementById('section-headline').textContent=settings.headline||SETTINGS_DEFAULT.headline;
+  document.getElementById('footer-name').textContent=settings.hotelName||SETTINGS_DEFAULT.hotelName;
+  document.getElementById('footer-phone').textContent=settings.phone||SETTINGS_DEFAULT.phone;
+  document.getElementById('suc-bank').textContent=settings.bankName||SETTINGS_DEFAULT.bankName;
+  document.getElementById('suc-accno').textContent=settings.accountNo||SETTINGS_DEFAULT.accountNo;
+  document.getElementById('suc-accname').textContent=settings.accountName||SETTINGS_DEFAULT.accountName;
+  document.getElementById('suc-phone').textContent=settings.phone||SETTINGS_DEFAULT.phone;
+  document.getElementById('reservation-notice').innerHTML=settings.reservationNotice||SETTINGS_DEFAULT.reservationNotice;
+  const hrs=settings.reservationHoldHours||2;
+  document.getElementById('success-sub-msg').innerHTML=`Please complete payment within <strong style="color:var(--gold)">${hrs} hour${hrs!=1?'s':''}</strong> to secure your room.`;
+}
+
+function renderRooms(){
+  document.getElementById('rooms-loading').style.display='none';
+  document.getElementById('lodging-wrap').style.display='block';
+  document.getElementById('shortrest-wrap').style.display='block';
+  ['lodging','shortrest'].forEach(type=>{
+    const cont=document.getElementById(type+'-rooms');
+    cont.innerHTML='';
+    rooms.filter(r=>r.type===type).forEach((room,i)=>{
+      const booked=getActiveBooking(room.id);
+      const bg=room.bgImage?`background:url('${room.bgImage}') center/cover`:`background:linear-gradient(135deg,${room.color},${room.accent}20)`;
+      cont.innerHTML+=`
+        <div class="room-card" style="animation-delay:${i*0.1+0.1}s">
+          <div class="room-visual" style="${bg}">
+            <div class="room-club-badge">${room.emoji} ${room.name}</div>
+            <div class="room-status-badge ${booked?'status-occupied':'status-available'}">${booked?'Occupied':'Available'}</div>
+          </div>
+          <div class="room-body">
+            <div class="room-name">${room.name}</div>
+            <div class="room-type-tag">${type==='lodging'?'🌙 Lodging · Overnight':'⏱ Short Rest · Quick Refresh'}</div>
+            <p class="room-desc">${room.desc}</p>
+            <div class="room-meta">
+              <div class="room-meta-item"><strong>Check-in</strong>${room.checkIn}</div>
+              <div class="room-meta-item"><strong>Check-out</strong>${room.checkOut}</div>
+            </div>
+            <div class="room-footer">
+              <div class="room-price">${fmtNaira(room.price)}<span>${room.duration}</span></div>
+              <div class="room-actions">
+                <button class="btn btn-ghost" style="padding:8px 14px" onclick="openQR('${room.id}',event)">QR</button>
+                ${booked?`<button class="btn btn-gold" disabled>Occupied</button>`:`<button class="btn btn-gold" onclick="openBooking('${room.id}',event)">Book Now</button>`}
+              </div>
+            </div>
+          </div>
+        </div>`;
+    });
+  });
+}
+
+function openQR(roomId,e){
+  if(e)e.stopPropagation();
+  const room=rooms.find(r=>r.id===roomId);
+  document.getElementById('qr-room-title').textContent=room.name+' — QR Code';
+  document.getElementById('qr-display-name').textContent=room.name;
+  const link=window.location.href.split('?')[0]+'?room='+roomId;
+  document.getElementById('qr-display-link').textContent=link;
+  const box=document.getElementById('qr-box');box.innerHTML='';
+  try{new QRCode(box,{text:link,width:160,height:160,colorDark:'#0D0D0D',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});}
+  catch(err){box.innerHTML='<div style="font-size:11px;color:#888;padding:20px">QR Ready</div>';}
+  openModal('qr-overlay');
+}
+function printQR(){
+  const canvas=document.querySelector('#qr-box canvas');
+  const name=document.getElementById('qr-display-name').textContent;
+  const link=document.getElementById('qr-display-link').textContent;
+  const w=window.open('','_blank');
+  w.document.write(`<html><head><title>QR - ${name}</title><style>body{display:flex;flex-direction:column;align-items:center;font-family:Georgia,serif;padding:40px;background:#fff;text-align:center}@media print{button{display:none}}</style></head><body><h2>${name}</h2><p style="font-size:12px;color:#888;margin-bottom:20px">SleepInn & Cool — Scan to Book</p>${canvas?`<img src="${canvas.toDataURL()}" width="200">`:'<p>QR unavailable</p>'}<p style="font-size:10px;color:#aaa;margin-top:16px;word-break:break-all;max-width:200px">${link}</p><br><button onclick="window.print()" style="padding:10px 24px">Print</button></body></html>`);
+  w.document.close();
+}
+
+function openBooking(roomId,e){
+  if(e)e.stopPropagation();
+  selectedRoom=rooms.find(r=>r.id===roomId);
+  if(!selectedRoom)return;
+  bookingDraft={};
+  document.getElementById('modal-room-name').textContent=selectedRoom.name;
+  document.getElementById('modal-room-type').textContent=selectedRoom.type==='lodging'?'🌙 Lodging Room':'⏱ Short-Rest Room';
+  ['g-name','g-phone','g-email'].forEach(id=>document.getElementById(id).value='');
+  goStep(1);openModal('booking-overlay');
+}
+
+function goStep(n){
+  [1,2,3,4].forEach(i=>{document.getElementById('step-'+i).style.display=i===n?'block':'none';document.getElementById('pip'+i)?.classList.toggle('done',i<=n);});
+  ['step1-error','step2-error','step3-error'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+}
+
+function goStep2(){
+  const name=document.getElementById('g-name').value.trim(),phone=document.getElementById('g-phone').value.trim();
+  const el=document.getElementById('step1-error');
+  if(!name||name.length<2){el.textContent='Please enter your full name.';el.style.display='block';return;}
+  if(!phone||phone.length<10){el.textContent='Please enter a valid phone number.';el.style.display='block';return;}
+  bookingDraft={name,phone,email:document.getElementById('g-email').value.trim()};
+  buildStep2Fields();goStep(2);
+}
+
+function buildStep2Fields(){
+  const r=selectedRoom,today=new Date().toISOString().split('T')[0];
+  let html='';
+  if(r.type==='lodging'){
+    html=`<label class="form-label">Check-in Date</label><input class="form-input" type="date" id="b-date" value="${today}" min="${today}">
+      <label class="form-label">Number of Nights</label><select class="form-input" id="b-nights">${[1,2,3,4,5,7].map(n=>`<option value="${n}">${n} Night${n>1?'s':''} — ${fmtNaira(r.price*n)}</option>`).join('')}</select>
+      <label class="form-label">Special Requests (optional)</label><input class="form-input" id="b-notes" placeholder="e.g. extra pillow, early check-in">`;
+  } else {
+    const now=new Date(),hhmm=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+    html=`<label class="form-label">Expected Arrival Time</label><input class="form-input" type="time" id="b-time" value="${hhmm}">
+      <label class="form-label">Duration</label><select class="form-input" id="b-hours"><option value="3">3 Hours — ${fmtNaira(r.price)}</option><option value="6">6 Hours — ${fmtNaira(r.price*2)}</option></select>`;
+  }
+  document.getElementById('step2-fields').innerHTML=html;
+}
+
+function goStep3(){
+  const r=selectedRoom;let total=r.price,nights=1,hours=3,date='',time='',notes='';
+  if(r.type==='lodging'){
+    date=document.getElementById('b-date').value;nights=parseInt(document.getElementById('b-nights').value);notes=document.getElementById('b-notes')?.value||'';
+    if(!date){const el=document.getElementById('step2-error');el.textContent='Please select a check-in date.';el.style.display='block';return;}
+    total=r.price*nights;bookingDraft={...bookingDraft,date,nights,notes,hours:null,time:null};
+  } else {
+    time=document.getElementById('b-time').value;hours=parseInt(document.getElementById('b-hours').value);
+    total=r.price*(hours/3);bookingDraft={...bookingDraft,time,hours,date:null,nights:null};
+  }
+  bookingDraft.total=total;
+  const rows=[['Room',r.name],['Type',r.type==='lodging'?'Overnight Lodging':'Short Rest'],
+    r.type==='lodging'?['Check-in',`${date} at ${r.checkIn}`]:['Arrival',time],
+    r.type==='lodging'?['Duration',`${nights} Night${nights>1?'s':''}`]:['Duration',`${hours} Hours`],
+    ['Guest',bookingDraft.name],['Phone',bookingDraft.phone],['TOTAL',fmtNaira(total)]];
+  if(notes)rows.splice(-1,0,['Requests',notes]);
+  document.getElementById('booking-summary').innerHTML=rows.map(row=>`<div class="summary-row ${row[0]==='TOTAL'?'total':''}"><span class="key">${row[0]}</span><span class="val">${row[1]}</span></div>`).join('');
+  goStep(3);
+}
+
+async function confirmBooking(){
+  const btn=document.getElementById('confirm-btn');btn.disabled=true;btn.textContent='Saving…';
+  const ref=genRef(),now=Date.now(),r=selectedRoom;
+  let checkinTime=now,checkoutTime;
+  if(r.type==='lodging'){
+    checkinTime=new Date(bookingDraft.date+'T14:00:00').getTime();checkoutTime=checkinTime+bookingDraft.nights*86400000;
+  } else {
+    const[hh,mm]=(bookingDraft.time||'12:00').split(':').map(Number);
+    const d=new Date();d.setHours(hh,mm,0,0);checkinTime=d.getTime();checkoutTime=checkinTime+bookingDraft.hours*3600000;
+  }
+  bookings.push({id:ref,roomId:r.id,roomName:r.name,type:r.type,guest:bookingDraft.name,phone:bookingDraft.phone,email:bookingDraft.email,total:bookingDraft.total,payMethod:'bank-transfer',status:'pending',checkinTime,checkoutTime,createdAt:now,notes:bookingDraft.notes||'',walkIn:false,nights:bookingDraft.nights||null,hours:bookingDraft.hours||null});
+  setSyncing(true,'Saving booking…');
+  await saveData();
+  setSyncing(false);
+  document.getElementById('success-ref').textContent=ref;
+  document.getElementById('success-amount').textContent=fmtNaira(bookingDraft.total);
+  document.getElementById('success-summary').innerHTML=`<div class="summary-row"><span class="key">Reference</span><span class="val" style="color:var(--gold);font-family:monospace">${ref}</span></div><div class="summary-row"><span class="key">Room</span><span class="val">${r.name}</span></div><div class="summary-row"><span class="key">Guest</span><span class="val">${bookingDraft.name}</span></div>`;
+  btn.disabled=false;btn.textContent='Confirm Reservation →';
+  goStep(4);
+}
+
+function openModal(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
+
+loadData().then(()=>{
+  const p=new URLSearchParams(window.location.search).get('room');
+  if(p)setTimeout(()=>{const r=rooms.find(r=>r.id===p);if(r)openBooking(p,null);},800);
+});
+</script>
+</body>
+</html>

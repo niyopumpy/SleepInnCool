@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SleepInn & Cool — Staff & Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>
+:root{--gold:#C9A84C;--gold-light:#E8C97A;--ink:#0D0D0D;--ink2:#111108;--surface:#1A1A14;--surface2:#1F1F18;--cream:#FAF7F2;--cream2:#D4CFC6;--muted:#6B6457;--muted2:#4A4640;--border:rgba(201,168,76,0.2);--border2:rgba(255,255,255,0.07);--success:#198754;--danger:#dc3545;--radius:4px;--radius-lg:12px;--radius-xl:16px;--sidebar:220px}
+*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%;overflow:hidden}
+body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--cream);font-size:14px}
+.app-shell{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:var(--sidebar);background:var(--ink2);border-right:0.5px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.main-panel{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.main-content{flex:1;overflow-y:auto;padding:24px}
+.sidebar-logo{padding:20px 16px 16px;border-bottom:0.5px solid var(--border)}
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--gold)}
+.logo-tag{font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:2px}
+.sidebar-user{padding:12px 16px;border-bottom:0.5px solid var(--border2);margin-bottom:8px}
+.user-name{font-size:13px;font-weight:500;color:var(--cream)}
+.user-role{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.nav-section-label{font-size:9px;color:var(--muted2);text-transform:uppercase;letter-spacing:2px;padding:8px 16px 4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;font-size:13px;color:var(--muted);border-left:2px solid transparent;transition:all 0.2s;border-radius:0 6px 6px 0;margin:1px 8px 1px 0}
+.nav-item:hover{background:var(--surface);color:var(--cream)}.nav-item.active{background:rgba(201,168,76,0.1);color:var(--gold);border-left-color:var(--gold)}
+.nav-item .icon{width:16px;text-align:center;font-size:14px}
+.nav-item .badge-count{margin-left:auto;background:var(--danger);color:#fff;font-size:10px;padding:1px 6px;border-radius:10px}
+.sidebar-bottom{margin-top:auto;padding:16px;border-top:0.5px solid var(--border2)}
+.logout-btn{width:100%;padding:10px;background:transparent;border:0.5px solid var(--border2);border-radius:var(--radius);color:var(--muted);font-size:12px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:8px;transition:all 0.2s}
+.logout-btn:hover{border-color:var(--danger);color:var(--danger)}
+.topbar{padding:14px 24px;border-bottom:0.5px solid var(--border2);display:flex;align-items:center;justify-content:space-between;background:var(--ink2);flex-shrink:0;gap:12px}
+.topbar-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--cream)}
+.topbar-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.topbar-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.topbar-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.sync-indicator{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--success)}
+.sync-dot.syncing{background:var(--gold);animation:blink 0.8s infinite}
+.sync-dot.error{background:var(--danger)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.btn{padding:9px 16px;border-radius:var(--radius);border:none;cursor:pointer;font-size:12px;font-weight:500;letter-spacing:0.5px;transition:all 0.2s;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.btn-gold{background:var(--gold);color:var(--ink)}.btn-gold:hover{background:var(--gold-light)}.btn-gold:disabled{background:#444;color:#777;cursor:not-allowed}
+.btn-outline{background:transparent;border:0.5px solid var(--border);color:var(--gold)}.btn-outline:hover{background:rgba(201,168,76,0.08)}
+.btn-ghost{background:transparent;border:0.5px solid var(--border2);color:var(--muted)}.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn-danger{background:var(--danger);color:#fff}.btn-danger:hover{background:#c82333}
+.btn-success{background:var(--success);color:#fff}.btn-success:hover{background:#157347}
+.btn-sm{padding:6px 12px;font-size:11px}.btn-full{width:100%;display:block;text-align:center;padding:13px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--radius-lg);padding:16px}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--gold);line-height:1}
+.stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.stat-sub{font-size:11px;color:var(--muted2);margin-top:4px}
+.card{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px}
+.card-title{font-size:13px;font-weight:600;color:var(--cream);margin-bottom:12px}
+.room-status-card{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:10px;transition:border-color 0.2s}
+.room-status-card:hover{border-color:var(--border)}
+.rs-header{padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:0.5px solid var(--border2)}
+.rs-emoji{font-size:20px;width:32px;text-align:center}
+.rs-name{font-size:14px;font-weight:600;color:var(--cream);flex:1}
+.rs-type{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.rs-body{padding:12px 14px}
+.countdown-label{font-size:11px;color:var(--gold);font-family:monospace;margin-bottom:4px}
+.progress-track{height:4px;background:var(--surface2);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 1s linear}
+.rs-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:2px;font-size:10px;font-weight:500;letter-spacing:0.5px;text-transform:uppercase}
+.badge-green{background:rgba(25,135,84,0.12);color:#5ddb95;border:0.5px solid rgba(25,135,84,0.3)}
+.badge-red{background:rgba(220,53,69,0.12);color:#f87c7c;border:0.5px solid rgba(220,53,69,0.3)}
+.badge-amber{background:rgba(201,168,76,0.1);color:var(--gold-light);border:0.5px solid var(--border)}
+.badge-blue{background:rgba(77,159,220,0.1);color:#7ec8f5;border:0.5px solid rgba(77,159,220,0.3)}
+.badge-gray{background:rgba(255,255,255,0.05);color:var(--muted);border:0.5px solid var(--border2)}
+.badge-admin{background:rgba(201,168,76,0.15);color:var(--gold);border:0.5px solid var(--border)}
+.data-table{width:100%;border-collapse:collapse;font-size:12px}
+.data-table th{text-align:left;padding:8px 12px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px;border-bottom:0.5px solid var(--border2);font-weight:500}
+.data-table td{padding:10px 12px;border-bottom:0.5px solid var(--border2);color:var(--cream2);vertical-align:middle}
+.data-table tr:last-child td{border:none}.data-table tr:hover td{background:rgba(255,255,255,0.02)}
+.table-wrap{overflow-x:auto;border-radius:var(--radius-lg);border:0.5px solid var(--border2);background:var(--surface)}
+.form-group{margin-bottom:14px}
+.form-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px}
+.form-input{width:100%;padding:10px 12px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.1);border-radius:var(--radius);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:13px;transition:border-color 0.2s}
+.form-input:focus{outline:none;border-color:var(--gold)}.form-input::placeholder{color:var(--muted2)}
+select.form-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236B6457'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+textarea.form-input{resize:vertical;min-height:80px;line-height:1.5}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-hint{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}
+.sum-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:0.5px solid rgba(255,255,255,0.04);font-size:12px}
+.sum-row:last-child{border:none}.sum-key{color:var(--muted)}.sum-val{color:var(--cream);font-weight:500}
+.sum-total .sum-val{color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700}
+.timeline-item{display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border2)}
+.timeline-item:last-child{border:none}
+.timeline-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:4px}
+.timeline-body{flex:1}
+.alert{padding:10px 12px;border-radius:var(--radius);font-size:12px;margin-bottom:12px;line-height:1.5}
+.alert-success{background:rgba(25,135,84,0.12);border:0.5px solid rgba(25,135,84,0.3);color:#5ddb95}
+.alert-error{background:rgba(220,53,69,0.12);border:0.5px solid rgba(220,53,69,0.3);color:#f87c7c}
+.alert-info{background:rgba(77,159,220,0.1);border:0.5px solid rgba(77,159,220,0.3);color:#7ec8f5}
+.alert-warning{background:rgba(201,168,76,0.1);border:0.5px solid var(--border);color:var(--gold-light)}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--ink2);border:0.5px solid var(--border);border-radius:var(--radius-xl);padding:24px;width:100%;max-width:460px;max-height:88vh;overflow-y:auto}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--cream);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.modal-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0;line-height:1}.modal-close:hover{color:var(--cream)}
+.modal-footer{display:flex;gap:8px;margin-top:20px;padding-top:16px;border-top:0.5px solid var(--border2)}
+.modal-footer .btn{flex:1}
+.login-shell{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--ink);background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(201,168,76,0.03) 39px,rgba(201,168,76,0.03) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(201,168,76,0.03) 39px,rgba(201,168,76,0.03) 40px)}
+.login-box{background:var(--ink2);border:0.5px solid var(--border);border-radius:var(--radius-xl);padding:40px 32px;width:100%;max-width:360px}
+.login-logo{text-align:center;margin-bottom:32px}
+.login-logo-name{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold);letter-spacing:1px}
+.login-logo-tag{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+.login-divider{width:40px;height:0.5px;background:var(--border);margin:16px auto}
+.credential-hint{margin-top:16px;padding:12px;background:rgba(255,255,255,0.02);border-radius:var(--radius);border:0.5px solid var(--border2);font-size:11px;color:var(--muted);line-height:1.8}
+.credential-hint code{color:var(--gold-light);font-family:monospace}
+.qr-box-lg{width:180px;height:180px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;overflow:hidden}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--surface);border:0.5px solid var(--gold);color:var(--cream);padding:12px 18px;border-radius:8px;font-size:13px;z-index:400;transform:translateX(120%);transition:transform 0.3s;max-width:320px}
+.toast.show{transform:translateX(0)}
+/* notice preview box */
+.notice-preview{background:rgba(201,168,76,0.1);border:0.5px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-size:13px;line-height:1.6;color:var(--gold-light);margin-bottom:12px}
+.notice-preview strong{color:var(--gold)}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:2px}
+@media(max-width:640px){.sidebar{position:fixed;left:-220px;top:0;bottom:0;z-index:100;transition:left 0.3s}.sidebar.open{left:0}.form-row{grid-template-columns:1fr}.stat-grid{grid-template-columns:1fr 1fr}}
+@media(min-width:641px){.mobile-menu-btn{display:none!important}}
+.mobile-menu-btn{background:none;border:none;color:var(--cream);font-size:20px;cursor:pointer;padding:4px;display:flex}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:99}
+.sidebar-overlay.open{display:block}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-page" class="login-shell">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-name">SleepInn & Cool</div>
+      <div class="login-divider"></div>
+      <div class="login-logo-tag">Staff & Admin Portal</div>
+    </div>
+    <div id="login-err" class="alert alert-error" style="display:none"></div>
+    <div class="form-group"><label class="form-label">Username</label><input class="form-input" id="l-user" placeholder="Username" autocomplete="username"></div>
+    <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="l-pass" placeholder="Password" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="btn btn-gold btn-full" onclick="doLogin()">Sign In →</button>
+    <div class="credential-hint">
+      Demo: <code>admin / admin123</code> &nbsp;|&nbsp; <code>staff1 / staff123</code> &nbsp;|&nbsp; <code>staff2 / staff456</code>
+    </div>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div id="app-shell" class="app-shell" style="display:none">
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><div class="logo-name">SleepInn & Cool</div><div class="logo-tag">Hotel Management</div></div>
+    <div class="sidebar-user"><div class="user-name" id="sb-user-name"></div><div class="user-role" id="sb-user-role"></div></div>
+    <div class="nav-section-label">Dashboard</div>
+    <div class="nav-item active" id="nav-overview" onclick="navigate('overview')"><span class="icon">◈</span> Overview</div>
+    <div class="nav-item" id="nav-rooms" onclick="navigate('rooms')"><span class="icon">⬡</span> Rooms</div>
+    <div class="nav-section-label">Operations</div>
+    <div class="nav-item" id="nav-bookings" onclick="navigate('bookings')"><span class="icon">◇</span> Bookings <span class="badge-count" id="pending-badge" style="display:none">0</span></div>
+    <div class="nav-item" id="nav-checkin" onclick="navigate('checkin')"><span class="icon">▷</span> Check In/Out</div>
+    <div class="nav-item" id="nav-walkin" onclick="navigate('walkin')"><span class="icon">+</span> Walk-In Booking</div>
+    <div class="nav-section-label admin-only" style="display:none">Admin Only</div>
+    <div class="nav-item admin-only" id="nav-editrooms" style="display:none" onclick="navigate('editrooms')"><span class="icon">✎</span> Edit Rooms</div>
+    <div class="nav-item admin-only" id="nav-settings" style="display:none" onclick="navigate('settings')"><span class="icon">⚙</span> Settings</div>
+    <div class="nav-item admin-only" id="nav-qrcodes" style="display:none" onclick="navigate('qrcodes')"><span class="icon">▦</span> QR Codes</div>
+    <div class="sidebar-bottom"><button class="logout-btn" onclick="doLogout()">⎋ &nbsp; Sign Out</button></div>
+  </div>
+  <div class="main-panel">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" onclick="openSidebar()">☰</button>
+        <div><div class="topbar-title" id="topbar-title">Overview</div><div class="topbar-sub" id="topbar-sub"></div></div>
+      </div>
+      <div class="topbar-actions">
+        <div class="sync-indicator"><div class="sync-dot" id="sync-dot"></div><span id="sync-label">Live</span></div>
+        <div id="topbar-actions-slot"></div>
+      </div>
+    </div>
+    <div class="main-content" id="main-content"></div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="overlay" id="checkout-modal">
+  <div class="modal"><div class="modal-title">Check Out Guest <button class="modal-close" onclick="closeModal('checkout-modal')">✕</button></div><div id="checkout-content"></div><div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('checkout-modal')">Cancel</button><button class="btn btn-success" id="checkout-confirm-btn">Confirm Check Out</button></div></div>
+</div>
+<div class="overlay" id="edit-room-modal">
+  <div class="modal"><div class="modal-title">Edit Room <button class="modal-close" onclick="closeModal('edit-room-modal')">✕</button></div><div id="edit-room-content"></div><div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('edit-room-modal')">Cancel</button><button class="btn btn-gold" onclick="saveRoomEdit()">Save Changes</button></div></div>
+</div>
+<div class="overlay" id="booking-detail-modal">
+  <div class="modal"><div class="modal-title">Booking Details <button class="modal-close" onclick="closeModal('booking-detail-modal')">✕</button></div><div id="booking-detail-content"></div></div>
+</div>
+<div class="overlay" id="qr-modal">
+  <div class="modal" style="text-align:center"><div class="modal-title" style="justify-content:space-between"><span id="qr-modal-title">QR Code</span><button class="modal-close" onclick="closeModal('qr-modal')">✕</button></div><div class="qr-box-lg" id="qr-modal-box"></div><div style="font-size:11px;color:var(--muted);margin-bottom:16px;word-break:break-all" id="qr-modal-link"></div><button class="btn btn-gold btn-full" onclick="printQRModal()">Print QR Code</button></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// CLOUD CONFIG — must match customer-booking.html
+// ═══════════════════════════════════════════════════
+const JSONBIN_BIN_ID  = '69c284a3b7ec241ddc9ae42d';
+const JSONBIN_API_KEY = '$2a$10$y.PWFFjVKUj/1SJSyqqdDuTEpAu6jyB/uTAOfCERnolhrudydJsvS';
+const BIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+const POLL_MS  = 15000;
+
+const CREDENTIALS={admin:{pass:'admin123',role:'admin',name:'Administrator'},staff1:{pass:'staff123',role:'staff',name:'Amaka — Front Desk'},staff2:{pass:'staff456',role:'staff',name:'Chidi — Front Desk'}};
+
+const ROOMS_DEFAULT=[
+  {id:'manchester-united',name:'Manchester United',type:'lodging',  price:15000,duration:'Per Night',  checkIn:'2:00 PM',   checkOut:'12:00 PM',  desc:'A richly appointed lodging room radiating the spirit of champions. King-sized bed, climate control, en-suite bathroom, and premium toiletries.',color:'#8B0000',accent:'#cc0000',emoji:'⚽'},
+  {id:'barcelona',        name:'Barcelona',        type:'lodging',  price:18000,duration:'Per Night',  checkIn:'2:00 PM',   checkOut:'12:00 PM',  desc:'Elegant and modern — artistry and flair. Deluxe bed, workspace, and city-facing window.',                                                     color:'#004499',accent:'#0055cc',emoji:'🔵'},
+  {id:'liverpool',        name:'Liverpool',        type:'lodging',  price:14000,duration:'Per Night',  checkIn:'2:00 PM',   checkOut:'12:00 PM',  desc:'Warm and welcoming lodge room with en-suite shower, smart TV, and complimentary breakfast.',                                                   color:'#8B0015',accent:'#c8102e',emoji:'🔴'},
+  {id:'chelsea',          name:'Chelsea',          type:'shortrest',price:5000, duration:'Per 3 Hours',checkIn:'On Arrival',checkOut:'3 hrs later',desc:'Clean private short-rest suite — perfect for a quick refresh, power nap, or midday break.',                                                    color:'#003399',accent:'#034694',emoji:'💙'},
+  {id:'arsenal',          name:'Arsenal',          type:'shortrest',price:4500, duration:'Per 3 Hours',checkIn:'On Arrival',checkOut:'3 hrs later',desc:'Compact and comfortable short-rest room with private bathroom, fresh linens, and full privacy.',                                              color:'#8B1500',accent:'#EF0107',emoji:'🔺'}
+];
+const SETTINGS_DEFAULT={tagline:'Your rest is our pride',headline:'Choose Your Room',hotelName:'SleepInn & Cool Hotel',bankName:'First Bank of Nigeria',accountNo:'3012345678',accountName:'SleepInn & Cool Hotel',phone:'+234 800 000 0000',
+  reservationNotice:'💳 <strong>Payment by Bank Transfer</strong><br>After confirming, you\'ll receive our bank details and a unique reference code. Your room is reserved for <strong>2 hours</strong> pending payment confirmation.',
+  reservationHoldHours:2};
+
+let rooms=ROOMS_DEFAULT.map(r=>({...r})),bookings=[],settings={...SETTINGS_DEFAULT};
+let currentUser=null,currentRole=null,currentPage='overview';
+let editingRoomId=null,checkoutBookingId=null,pollTimer=null;
+
+// ─── CLOUD ────────────────────────────────────────
+const configured=()=>JSONBIN_BIN_ID!=='PASTE_YOUR_BIN_ID_HERE'&&JSONBIN_API_KEY!=='PASTE_YOUR_API_KEY_HERE';
+
+function setSyncStatus(state){
+  const dot=document.getElementById('sync-dot'),lbl=document.getElementById('sync-label');
+  if(!dot)return;
+  dot.className='sync-dot'+(state==='syncing'?' syncing':state==='error'?' error':'');
+  lbl.textContent=state==='syncing'?'Syncing…':state==='error'?'Offline':'Live';
+}
+
+async function cloudGet(){
+  setSyncStatus('syncing');
+  const r=await fetch(BIN_URL+'/latest',{headers:{'X-Master-Key':JSONBIN_API_KEY,'X-Bin-Meta':'false'}});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return r.json();
+}
+async function cloudPut(){
+  setSyncStatus('syncing');
+  await fetch(BIN_URL,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':JSONBIN_API_KEY},body:JSON.stringify({rooms,bookings,settings,schemaVersion:1})});
+  setSyncStatus('ok');
+}
+
+async function loadData(){
+  if(!configured()){
+    const lr=localStorage.getItem('sic_rooms'),lb=localStorage.getItem('sic_bookings'),ls=localStorage.getItem('sic_settings');
+    if(lr)rooms=JSON.parse(lr); if(lb)bookings=JSON.parse(lb); if(ls)settings={...SETTINGS_DEFAULT,...JSON.parse(ls)};
+    setSyncStatus('error');showToast('⚠ Cloud not configured — data is device-local');return;
+  }
+  try{const d=await cloudGet();mergeData(d);setSyncStatus('ok');}
+  catch(e){setSyncStatus('error');showToast('Cloud unreachable — showing local cache');}
+  startPolling();
+}
+
+async function saveData(){
+  if(!configured()){localStorage.setItem('sic_rooms',JSON.stringify(rooms));localStorage.setItem('sic_bookings',JSON.stringify(bookings));localStorage.setItem('sic_settings',JSON.stringify(settings));return;}
+  try{await cloudPut();}catch(e){setSyncStatus('error');showToast('Save failed — check connection');}
+}
+
+function mergeData(d){
+  if(d.rooms?.length)rooms=d.rooms;
+  if(d.bookings)bookings=d.bookings;
+  if(d.settings&&Object.keys(d.settings).length)settings={...SETTINGS_DEFAULT,...d.settings};
+}
+
+function startPolling(){
+  if(pollTimer)clearInterval(pollTimer);
+  pollTimer=setInterval(async()=>{
+    if(!configured())return;
+    try{const d=await cloudGet();mergeData(d);setSyncStatus('ok');updatePendingBadge();
+      // live update countdowns without full re-render
+      document.querySelectorAll('[data-countdown]').forEach(el=>{
+        const b=bookings.find(bk=>bk.id===el.getAttribute('data-countdown'));
+        if(b&&b.status==='confirmed'){const rem=b.checkoutTime-Date.now();el.textContent='⏱ '+fmtCD(Math.max(0,rem));const p=document.getElementById('prog-'+b.id);if(p)p.style.width=pct(b)+'%';}
+      });
+    }catch(e){setSyncStatus('error');}
+  },POLL_MS);
+}
+
+// ─── HELPERS ──────────────────────────────────────
+function getRoom(id){return rooms.find(r=>r.id===id);}
+function getActiveBooking(roomId){const now=Date.now();return bookings.find(b=>b.roomId===roomId&&b.status==='confirmed'&&b.checkoutTime>now);}
+function getPending(){return bookings.filter(b=>b.status==='pending').length;}
+function fmtNaira(n){return '₦'+Number(n).toLocaleString();}
+function fmtDate(ts){return ts?new Date(ts).toLocaleDateString('en-NG',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';}
+function fmtCD(ms){const h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000),s=Math.floor((ms%60000)/1000);return`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}
+function pct(b){return Math.max(0,Math.min(100,((Date.now()-b.checkinTime)/(b.checkoutTime-b.checkinTime))*100));}
+function genRef(){return 'SIC'+Date.now().toString().slice(-8).toUpperCase();}
+function updatePendingBadge(){const n=getPending(),el=document.getElementById('pending-badge');if(el){el.textContent=n;el.style.display=n>0?'inline':'none';}}
+
+// ─── AUTH ─────────────────────────────────────────
+function doLogin(){
+  const user=document.getElementById('l-user').value.trim(),pass=document.getElementById('l-pass').value;
+  const err=document.getElementById('login-err');
+  if(CREDENTIALS[user]&&CREDENTIALS[user].pass===pass){
+    currentUser=user;currentRole=CREDENTIALS[user].role;
+    err.style.display='none';
+    document.getElementById('login-page').style.display='none';
+    document.getElementById('app-shell').style.display='flex';
+    document.getElementById('sb-user-name').textContent=CREDENTIALS[user].name;
+    document.getElementById('sb-user-role').textContent=currentRole==='admin'?'★ Administrator':'Staff';
+    document.querySelectorAll('.admin-only').forEach(el=>el.style.display=currentRole==='admin'?'':'none');
+    loadData().then(()=>{navigate('overview');});
+  } else {err.style.display='block';err.textContent='Incorrect username or password.';}
+}
+function doLogout(){currentUser=null;currentRole=null;if(pollTimer)clearInterval(pollTimer);document.getElementById('app-shell').style.display='none';document.getElementById('login-page').style.display='flex';document.getElementById('l-user').value='';document.getElementById('l-pass').value='';}
+
+// ─── NAVIGATION ───────────────────────────────────
+function navigate(page){
+  currentPage=page;
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const el=document.getElementById('nav-'+page);if(el)el.classList.add('active');
+  closeSidebar();
+  const titles={overview:'Overview',rooms:'Room Status',bookings:'All Bookings',checkin:'Check In / Out',walkin:'Walk-In Booking',editrooms:'Edit Rooms',settings:'Hotel Settings',qrcodes:'Room QR Codes'};
+  document.getElementById('topbar-title').textContent=titles[page]||page;
+  document.getElementById('topbar-sub').textContent='';
+  document.getElementById('topbar-actions-slot').innerHTML='';
+  ({overview:renderOverview,rooms:renderRooms,bookings:renderBookings,checkin:renderCheckin,walkin:renderWalkIn,editrooms:renderEditRooms,settings:renderSettings,qrcodes:renderQRCodes})[page]?.();
+}
+
+// ─── OVERVIEW ─────────────────────────────────────
+function renderOverview(){
+  document.getElementById('topbar-actions-slot').innerHTML=`<button class="btn btn-gold btn-sm" onclick="navigate('walkin')">+ Walk-In</button>`;
+  const occupied=rooms.filter(r=>getActiveBooking(r.id)).length;
+  const revenue=bookings.filter(b=>b.status!=='pending').reduce((s,b)=>s+b.total,0);
+  let html=`<div class="stat-grid">
+    <div class="stat-card"><div class="stat-num">${occupied}</div><div class="stat-label">Occupied</div><div class="stat-sub">of ${rooms.length} rooms</div></div>
+    <div class="stat-card"><div class="stat-num">${rooms.length-occupied}</div><div class="stat-label">Vacant</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:#f87c7c">${getPending()}</div><div class="stat-label">Pending Pay</div></div>
+    <div class="stat-card"><div class="stat-num" style="font-size:18px">${fmtNaira(revenue)}</div><div class="stat-label">Revenue</div></div>
+  </div>
+  <div style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Live Room Status</div>`;
+  rooms.forEach(room=>{
+    const b=getActiveBooking(room.id);
+    const rem=b?b.checkoutTime-Date.now():0;
+    html+=`<div class="room-status-card" style="border-left:3px solid ${b?'var(--danger)':'var(--success)'}">
+      <div class="rs-header"><div class="rs-emoji">${room.emoji}</div><div style="flex:1"><div class="rs-name">${room.name}</div><div class="rs-type">${room.type==='lodging'?'🌙 Lodging':'⏱ Short Rest'}</div></div><span class="badge ${b?'badge-red':'badge-green'}">${b?'Occupied':'Vacant'}</span></div>
+      ${b?`<div class="rs-body"><div style="font-size:12px;color:var(--cream2);margin-bottom:4px">👤 ${b.guest} · ${b.phone}</div><div style="font-size:11px;color:var(--muted);margin-bottom:8px">Ref: ${b.id} · ${fmtNaira(b.total)}</div>
+        <div class="countdown-label" data-countdown="${b.id}">⏱ ${fmtCD(Math.max(0,rem))}</div>
+        <div class="progress-track"><div class="progress-fill" id="prog-${b.id}" style="width:${pct(b)}%"></div></div>
+        <div class="rs-actions"><button class="btn btn-ghost btn-sm" onclick="viewBooking('${b.id}')">View</button><button class="btn btn-success btn-sm" onclick="openCheckout('${b.id}')">Check Out</button></div></div>`:
+      `<div class="rs-body" style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;color:var(--muted)">${fmtNaira(room.price)} ${room.duration}</span><button class="btn btn-gold btn-sm" onclick="navigate('walkin')">Walk-In</button></div>`}
+    </div>`;
+  });
+  const recent=[...bookings].sort((a,b)=>b.createdAt-a.createdAt).slice(0,6);
+  html+=`<div style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:20px 0 12px">Recent Activity</div>`;
+  if(recent.length)recent.forEach(b=>{html+=`<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-body"><div style="font-size:13px;color:var(--cream)">${b.guest} — <strong>${b.roomName}</strong> <span class="badge ${b.status==='confirmed'?'badge-green':b.status==='checkedout'?'badge-blue':b.status==='pending'?'badge-amber':'badge-gray'}">${b.status}</span></div><div style="font-size:11px;color:var(--muted)">${fmtNaira(b.total)} · ${b.walkIn?'Walk-in':'Online'} · ${fmtDate(b.createdAt)}</div></div></div>`;});
+  else html+=`<p style="color:var(--muted);font-size:13px;padding:12px 0">No bookings yet.</p>`;
+  document.getElementById('main-content').innerHTML=html;
+}
+
+// ─── ROOMS ────────────────────────────────────────
+function renderRooms(){
+  let html='';
+  rooms.forEach(room=>{
+    const b=getActiveBooking(room.id);const rem=b?b.checkoutTime-Date.now():0;
+    html+=`<div class="room-status-card" style="border-left:3px solid ${b?'var(--danger)':'var(--success)'}">
+      <div class="rs-header"><div class="rs-emoji">${room.emoji}</div><div style="flex:1"><div class="rs-name">${room.name}</div><div class="rs-type">${room.type==='lodging'?'🌙 Overnight Lodging':'⏱ Short Rest · '+room.duration}</div></div><span class="badge ${b?'badge-red':'badge-green'}">${b?'Occupied':'Vacant'}</span></div>
+      ${b?`<div class="rs-body"><div style="font-size:12px;color:var(--cream2);margin-bottom:4px">👤 ${b.guest} · ${b.phone}</div><div style="font-size:11px;color:var(--muted);margin-bottom:8px">In: ${fmtDate(b.checkinTime)} → Out: ${fmtDate(b.checkoutTime)}</div>
+        <div class="countdown-label" data-countdown="${b.id}">⏱ ${fmtCD(Math.max(0,rem))}</div><div class="progress-track"><div class="progress-fill" id="prog-${b.id}" style="width:${pct(b)}%"></div></div>
+        <div class="rs-actions"><button class="btn btn-ghost btn-sm" onclick="viewBooking('${b.id}')">Details</button><button class="btn btn-success btn-sm" onclick="openCheckout('${b.id}')">Check Out</button></div></div>`:
+      `<div class="rs-body" style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;color:var(--muted)">${fmtNaira(room.price)} / ${room.duration} · Check-in: ${room.checkIn}</span><button class="btn btn-gold btn-sm" onclick="navigate('walkin')">+ Walk-In</button></div>`}
+    </div>`;
+  });
+  document.getElementById('main-content').innerHTML=html;
+}
+
+// ─── BOOKINGS ─────────────────────────────────────
+function renderBookings(){
+  document.getElementById('topbar-actions-slot').innerHTML=`<select id="bk-filter" onchange="renderBookings()" style="background:var(--surface);border:0.5px solid var(--border2);color:var(--cream);padding:6px 10px;border-radius:var(--radius);font-size:12px"><option value="all">All</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="checkedout">Checked Out</option></select>`;
+  const filter=document.getElementById('bk-filter')?.value||'all';
+  const sorted=[...bookings].sort((a,b)=>b.createdAt-a.createdAt);
+  const filtered=filter==='all'?sorted:sorted.filter(b=>b.status===filter);
+  const summary=['pending','confirmed','checkedout'].map(s=>`<span class="badge ${s==='confirmed'?'badge-green':s==='pending'?'badge-amber':'badge-blue'}" style="margin-right:6px">${s}: ${bookings.filter(b=>b.status===s).length}</span>`).join('');
+  if(!filtered.length){document.getElementById('main-content').innerHTML=`<div style="margin-bottom:12px">${summary}</div><p style="color:var(--muted);padding:20px 0">No bookings found.</p>`;return;}
+  const rows=filtered.map(b=>`<tr><td><span style="font-family:monospace;font-size:11px;color:var(--gold)">${b.id}</span></td><td><strong style="color:var(--cream)">${b.guest}</strong><br><span style="color:var(--muted);font-size:11px">${b.phone}</span></td><td>${b.roomName}</td><td><strong style="color:var(--gold)">${fmtNaira(b.total)}</strong></td><td><span class="badge ${b.status==='confirmed'?'badge-green':b.status==='checkedout'?'badge-blue':b.status==='pending'?'badge-amber':'badge-gray'}">${b.status}</span></td><td><span class="badge ${b.walkIn?'badge-blue':'badge-gray'}">${b.walkIn?'Walk-in':'Online'}</span></td><td>${new Date(b.createdAt).toLocaleDateString('en-NG',{day:'2-digit',month:'short'})}</td><td style="white-space:nowrap"><button class="btn btn-ghost btn-sm" onclick="viewBooking('${b.id}')" style="margin-right:4px">View</button>${b.status==='pending'?`<button class="btn btn-success btn-sm" onclick="confirmPay('${b.id}')" style="margin-right:4px">✓ Pay</button>`:''}${currentRole==='admin'?`<button class="btn btn-danger btn-sm" onclick="deleteBooking('${b.id}')">Del</button>`:''}</td></tr>`).join('');
+  document.getElementById('main-content').innerHTML=`<div style="margin-bottom:16px">${summary}</div><div class="table-wrap"><table class="data-table"><thead><tr><th>Ref</th><th>Guest</th><th>Room</th><th>Amount</th><th>Status</th><th>Source</th><th>Date</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+// ─── CHECK IN/OUT ─────────────────────────────────
+function renderCheckin(){
+  document.getElementById('main-content').innerHTML=`<div style="max-width:480px"><div class="card"><div class="card-title">Look Up Booking</div><div class="form-group"><label class="form-label">Booking Reference</label><input class="form-input" id="ci-ref" placeholder="e.g. SIC12345678" style="text-transform:uppercase" onkeydown="if(event.key==='Enter')lookupBooking()"></div><button class="btn btn-gold" onclick="lookupBooking()">Search →</button></div><div id="ci-result" style="margin-top:16px"></div></div>`;
+}
+function lookupBooking(){
+  const ref=document.getElementById('ci-ref').value.trim().toUpperCase();
+  const b=bookings.find(bk=>bk.id===ref);
+  const cont=document.getElementById('ci-result');
+  if(!b){cont.innerHTML='<div class="alert alert-error">No booking found with that reference.</div>';return;}
+  const r=getRoom(b.roomId);
+  cont.innerHTML=`<div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><span style="font-size:28px">${r?.emoji}</span><div style="flex:1"><div style="font-size:16px;font-weight:600;color:var(--cream)">${b.roomName}</div><div style="font-size:11px;color:var(--muted)">${b.type==='lodging'?'Lodging':'Short Rest'}</div></div><span class="badge ${b.status==='confirmed'?'badge-green':b.status==='checkedout'?'badge-blue':b.status==='pending'?'badge-amber':'badge-gray'}">${b.status}</span></div>
+    <div class="sum-row"><span class="sum-key">Guest</span><span class="sum-val">${b.guest}</span></div><div class="sum-row"><span class="sum-key">Phone</span><span class="sum-val">${b.phone}</span></div><div class="sum-row sum-total"><span class="sum-key">Amount</span><span class="sum-val">${fmtNaira(b.total)}</span></div><div class="sum-row"><span class="sum-key">Payment</span><span class="sum-val">${b.payMethod}</span></div>
+    <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+      ${b.status==='pending'?`<button class="btn btn-success btn-sm" onclick="confirmPay('${b.id}');lookupBooking()">✓ Confirm Payment</button>`:''}
+      ${b.status==='confirmed'?`<button class="btn btn-gold btn-sm" onclick="openCheckout('${b.id}')">Check Out Guest</button>`:''}
+      ${b.status==='checkedout'?'<span class="badge badge-blue">Already Checked Out</span>':''}
+    </div></div>`;
+}
+
+// ─── WALK-IN ──────────────────────────────────────
+function renderWalkIn(){
+  const vacant=rooms.filter(r=>!getActiveBooking(r.id));
+  if(!vacant.length){document.getElementById('main-content').innerHTML='<div class="alert alert-error">All rooms are currently occupied.</div>';return;}
+  document.getElementById('main-content').innerHTML=`<div style="max-width:480px"><div class="card"><div class="card-title">Walk-In Guest Details</div>
+    <div class="form-group"><label class="form-label">Guest Full Name</label><input class="form-input" id="wi-name" placeholder="e.g. Chukwuemeka Obi"></div>
+    <div class="form-group"><label class="form-label">Phone Number</label><input class="form-input" id="wi-phone" placeholder="08012345678" type="tel"></div>
+    <div class="form-group"><label class="form-label">Select Room</label><select class="form-input" id="wi-room" onchange="updateWalkInExtra()">${vacant.map(r=>`<option value="${r.id}">${r.emoji} ${r.name} — ${r.type==='lodging'?'Lodging':'Short Rest'} · ${fmtNaira(r.price)}</option>`).join('')}</select></div>
+    <div id="wi-extra"></div>
+    <div class="form-group"><label class="form-label">Payment Method</label><select class="form-input" id="wi-pay"><option value="cash">Cash</option><option value="pos">POS / Card</option><option value="transfer">Bank Transfer</option></select></div>
+    <div id="wi-total" style="background:rgba(201,168,76,0.08);border:0.5px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:16px;font-size:13px;color:var(--muted)">Select room to see pricing.</div>
+    <div id="wi-err" class="alert alert-error" style="display:none"></div>
+    <button class="btn btn-gold btn-full" onclick="submitWalkIn()">Confirm Walk-In →</button>
+  </div></div>`;
+  updateWalkInExtra();
+}
+function updateWalkInExtra(){
+  const sel=document.getElementById('wi-room');if(!sel)return;
+  const room=getRoom(sel.value);if(!room)return;
+  const ex=document.getElementById('wi-extra');
+  if(room.type==='lodging'){ex.innerHTML=`<div class="form-group"><label class="form-label">Number of Nights</label><select class="form-input" id="wi-nights" onchange="calcWalkInTotal()">${[1,2,3,4,5,7].map(n=>`<option value="${n}">${n} Night${n>1?'s':''} — ${fmtNaira(room.price*n)}</option>`).join('')}</select></div>`;}
+  else{ex.innerHTML=`<div class="form-group"><label class="form-label">Duration</label><select class="form-input" id="wi-hours" onchange="calcWalkInTotal()"><option value="3">3 Hours — ${fmtNaira(room.price)}</option><option value="6">6 Hours — ${fmtNaira(room.price*2)}</option></select></div>`;}
+  calcWalkInTotal();
+}
+function calcWalkInTotal(){
+  const sel=document.getElementById('wi-room');const room=getRoom(sel?.value);if(!room)return;
+  let total=room.price;
+  if(room.type==='lodging'){const n=parseInt(document.getElementById('wi-nights')?.value||'1');total=room.price*n;}
+  else{const h=parseInt(document.getElementById('wi-hours')?.value||'3');total=room.price*(h/3);}
+  document.getElementById('wi-total').innerHTML=`<div style="display:flex;justify-content:space-between"><span>Total Amount Due:</span><strong style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:20px">${fmtNaira(total)}</strong></div>`;
+}
+async function submitWalkIn(){
+  const name=document.getElementById('wi-name').value.trim(),phone=document.getElementById('wi-phone').value.trim();
+  const roomId=document.getElementById('wi-room').value,pay=document.getElementById('wi-pay').value;
+  const err=document.getElementById('wi-err');
+  if(!name||name.length<2){err.textContent='Enter guest full name.';err.style.display='block';return;}
+  if(!phone||phone.length<10){err.textContent='Enter a valid phone number.';err.style.display='block';return;}
+  const room=getRoom(roomId),ref=genRef(),now=Date.now();
+  let total=room.price,checkoutTime;
+  if(room.type==='lodging'){const n=parseInt(document.getElementById('wi-nights')?.value||'1');total=room.price*n;checkoutTime=now+n*86400000;}
+  else{const h=parseInt(document.getElementById('wi-hours')?.value||'3');total=room.price*(h/3);checkoutTime=now+h*3600000;}
+  bookings.push({id:ref,roomId,roomName:room.name,type:room.type,guest:name,phone,email:'',total,payMethod:pay,status:'confirmed',checkinTime:now,checkoutTime,createdAt:now,notes:'',walkIn:true});
+  await saveData();showToast('✓ Walk-in booked! Ref: '+ref);updatePendingBadge();navigate('overview');
+}
+
+// ─── BOOKING ACTIONS ──────────────────────────────
+function viewBooking(id){
+  const b=bookings.find(bk=>bk.id===id);if(!b)return;
+  document.getElementById('booking-detail-content').innerHTML=`
+    <div class="sum-row"><span class="sum-key">Reference</span><span class="sum-val" style="color:var(--gold);font-family:monospace">${b.id}</span></div>
+    <div class="sum-row"><span class="sum-key">Guest</span><span class="sum-val">${b.guest}</span></div>
+    <div class="sum-row"><span class="sum-key">Phone</span><span class="sum-val">${b.phone}</span></div>
+    ${b.email?`<div class="sum-row"><span class="sum-key">Email</span><span class="sum-val">${b.email}</span></div>`:''}
+    <div class="sum-row"><span class="sum-key">Room</span><span class="sum-val">${b.roomName}</span></div>
+    <div class="sum-row"><span class="sum-key">Type</span><span class="sum-val">${b.type==='lodging'?'Overnight Lodging':'Short Rest'}</span></div>
+    <div class="sum-row"><span class="sum-key">Check-in</span><span class="sum-val">${fmtDate(b.checkinTime)}</span></div>
+    <div class="sum-row"><span class="sum-key">Check-out</span><span class="sum-val">${fmtDate(b.checkoutTime)}</span></div>
+    <div class="sum-row sum-total"><span class="sum-key">Amount</span><span class="sum-val">${fmtNaira(b.total)}</span></div>
+    <div class="sum-row"><span class="sum-key">Payment</span><span class="sum-val">${b.payMethod}</span></div>
+    <div class="sum-row"><span class="sum-key">Source</span><span class="sum-val">${b.walkIn?'Walk-in':'Online'}</span></div>
+    <div class="sum-row"><span class="sum-key">Status</span><span class="sum-val"><span class="badge ${b.status==='confirmed'?'badge-green':b.status==='checkedout'?'badge-blue':b.status==='pending'?'badge-amber':'badge-gray'}">${b.status}</span></span></div>
+    ${b.notes?`<div class="sum-row"><span class="sum-key">Notes</span><span class="sum-val">${b.notes}</span></div>`:''}
+    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
+      ${b.status==='pending'?`<button class="btn btn-success btn-sm" onclick="confirmPay('${b.id}');closeModal('booking-detail-modal');navigate(currentPage)">✓ Confirm Payment</button>`:''}
+      ${b.status==='confirmed'?`<button class="btn btn-gold btn-sm" onclick="openCheckout('${b.id}');closeModal('booking-detail-modal')">Check Out</button>`:''}
+      ${currentRole==='admin'?`<button class="btn btn-danger btn-sm" onclick="if(confirm('Delete?')){deleteBooking('${b.id}');closeModal('booking-detail-modal')}">Delete</button>`:''}
+    </div>`;
+  openModal('booking-detail-modal');
+}
+async function confirmPay(id){const b=bookings.find(bk=>bk.id===id);if(!b)return;b.status='confirmed';await saveData();showToast('Payment confirmed ✓');updatePendingBadge();navigate(currentPage);}
+async function deleteBooking(id){if(!confirm('Delete permanently?'))return;bookings=bookings.filter(b=>b.id!==id);await saveData();showToast('Booking deleted');updatePendingBadge();navigate(currentPage);}
+function openCheckout(id){
+  checkoutBookingId=id;const b=bookings.find(bk=>bk.id===id);if(!b)return;
+  document.getElementById('checkout-content').innerHTML=`<div class="alert alert-info">Checking out the guest below will free up the room.</div><div class="sum-row"><span class="sum-key">Guest</span><span class="sum-val">${b.guest}</span></div><div class="sum-row"><span class="sum-key">Room</span><span class="sum-val">${b.roomName}</span></div><div class="sum-row"><span class="sum-key">Ref</span><span class="sum-val" style="font-family:monospace">${b.id}</span></div>`;
+  document.getElementById('checkout-confirm-btn').onclick=async()=>{b.status='checkedout';b.checkoutTime=Date.now();await saveData();closeModal('checkout-modal');showToast('Guest checked out ✓');navigate(currentPage);};
+  openModal('checkout-modal');
+}
+
+// ─── EDIT ROOMS (Admin) ───────────────────────────
+function renderEditRooms(){
+  let html='';
+  rooms.forEach((room,i)=>{
+    html+=`<div class="card" style="border-left:3px solid ${room.accent||room.color}">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><span style="font-size:24px">${room.emoji}</span><div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--cream)">${room.name}</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">${room.type==='lodging'?'Lodging':'Short Rest'}</div></div><strong style="color:var(--gold)">${fmtNaira(room.price)}</strong></div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px">${room.desc}</p>
+      <div style="display:flex;gap:8px"><button class="btn btn-gold btn-sm" onclick="openEditRoom('${room.id}')">Edit</button><button class="btn btn-ghost btn-sm" onclick="openQRModal('${room.id}')">QR</button><button class="btn btn-ghost btn-sm" onclick="resetRoom(${i})" style="color:var(--muted)">Reset</button></div>
+    </div>`;
+  });
+  document.getElementById('main-content').innerHTML=html;
+}
+function openEditRoom(roomId){
+  editingRoomId=roomId;const room=getRoom(roomId);
+  document.getElementById('edit-room-content').innerHTML=`
+    <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="er-desc">${room.desc}</textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Price (₦)</label><input class="form-input" type="number" id="er-price" value="${room.price}"></div>
+      <div class="form-group"><label class="form-label">Duration Label</label><input class="form-input" id="er-duration" value="${room.duration}"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Check-in Time</label><input class="form-input" id="er-checkin" value="${room.checkIn}"></div>
+      <div class="form-group"><label class="form-label">Check-out Time</label><input class="form-input" id="er-checkout" value="${room.checkOut}"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Emoji / Icon</label><input class="form-input" id="er-emoji" value="${room.emoji}" maxlength="4"></div>
+      <div class="form-group"><label class="form-label">Accent Colour</label><input type="color" class="form-input" id="er-color" value="${room.accent||room.color}" style="height:38px;padding:4px 8px;cursor:pointer"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Background Image URL (optional)</label><input class="form-input" id="er-bgimg" value="${room.bgImage||''}" placeholder="https://…"></div>`;
+  openModal('edit-room-modal');
+}
+async function saveRoomEdit(){
+  const room=getRoom(editingRoomId);if(!room)return;
+  room.desc=document.getElementById('er-desc').value;
+  room.price=parseInt(document.getElementById('er-price').value)||room.price;
+  room.duration=document.getElementById('er-duration').value;
+  room.checkIn=document.getElementById('er-checkin').value;
+  room.checkOut=document.getElementById('er-checkout').value;
+  room.emoji=document.getElementById('er-emoji').value;
+  room.accent=room.color=document.getElementById('er-color').value;
+  room.bgImage=document.getElementById('er-bgimg').value;
+  await saveData();closeModal('edit-room-modal');showToast('Room updated ✓');renderEditRooms();
+}
+async function resetRoom(index){if(!confirm('Reset to defaults?'))return;rooms[index]={...ROOMS_DEFAULT[index]};await saveData();showToast('Room reset');renderEditRooms();}
+
+// ─── SETTINGS (Admin) — includes reservation notice editor ──
+function renderSettings(){
+  const hrs=settings.reservationHoldHours||2;
+  const notice=settings.reservationNotice||SETTINGS_DEFAULT.reservationNotice;
+  document.getElementById('main-content').innerHTML=`
+    <div style="max-width:540px">
+      <div class="card">
+        <div class="card-title">Hotel Identity</div>
+        <div class="form-group"><label class="form-label">Hotel Name</label><input class="form-input" id="s-hotelname" value="${settings.hotelName||''}"></div>
+        <div class="form-group"><label class="form-label">Tagline (Customer Page Hero)</label><input class="form-input" id="s-tagline" value="${settings.tagline||''}"></div>
+        <div class="form-group"><label class="form-label">Room Section Headline</label><input class="form-input" id="s-headline" value="${settings.headline||''}"></div>
+        <div class="form-group"><label class="form-label">Hotel Phone / WhatsApp</label><input class="form-input" id="s-phone" value="${settings.phone||''}"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Bank Transfer Details</div>
+        <div class="form-group"><label class="form-label">Account Name</label><input class="form-input" id="s-accname" value="${settings.accountName||''}"></div>
+        <div class="form-group"><label class="form-label">Bank Name</label><input class="form-input" id="s-bank" value="${settings.bankName||''}"></div>
+        <div class="form-group"><label class="form-label">Account Number</label><input class="form-input" id="s-accno" value="${settings.accountNo||''}"></div>
+      </div>
+
+      <div class="card" style="border-color:rgba(201,168,76,0.35)">
+        <div class="card-title" style="color:var(--gold)">✎ Customer Reservation Notice</div>
+        <p class="form-hint" style="margin-bottom:12px">This message appears on the booking page (Step 3) when the customer is about to confirm their reservation. You can use <code style="color:var(--gold-light);font-family:monospace">&lt;strong&gt;…&lt;/strong&gt;</code> for bold text and <code style="color:var(--gold-light);font-family:monospace">&lt;br&gt;</code> for line breaks.</p>
+
+        <div class="form-group"><label class="form-label">Reservation Hold Duration (hours)</label>
+          <input class="form-input" type="number" id="s-holdhours" value="${hrs}" min="1" max="24" oninput="updateNoticePreview()">
+          <div class="form-hint">How many hours you will hold the room pending payment. This appears in the notice and the success screen.</div>
+        </div>
+
+        <div class="form-group"><label class="form-label">Notice Message (HTML allowed)</label>
+          <textarea class="form-input" id="s-notice" rows="5" oninput="updateNoticePreview()">${notice.replace(/"/g,'&quot;')}</textarea>
+        </div>
+
+        <div class="form-label" style="margin-bottom:6px">Live Preview</div>
+        <div class="notice-preview" id="notice-preview">${notice}</div>
+
+        <button class="btn btn-outline btn-sm" onclick="document.getElementById('s-notice').value=${JSON.stringify(SETTINGS_DEFAULT.reservationNotice)};updateNoticePreview()">Reset to Default</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color:var(--muted)">Staff Credentials</div>
+        <div class="sum-row"><span class="sum-key">admin</span><span class="sum-val"><span class="badge badge-admin">admin123</span> &nbsp; Administrator</span></div>
+        <div class="sum-row"><span class="sum-key">staff1</span><span class="sum-val"><span class="badge badge-gray">staff123</span> &nbsp; Amaka</span></div>
+        <div class="sum-row"><span class="sum-key">staff2</span><span class="sum-val"><span class="badge badge-gray">staff456</span> &nbsp; Chidi</span></div>
+        <p class="form-hint" style="margin-top:8px">Credentials are set in the source code. Contact your developer to add or change staff accounts.</p>
+      </div>
+
+      <div class="card" style="border-color:rgba(220,53,69,0.3)">
+        <div class="card-title" style="color:#f87c7c">Danger Zone</div>
+        <button class="btn btn-danger" onclick="if(confirm('Delete ALL bookings?')){bookings=[];saveData();showToast('All bookings cleared');renderSettings()}">Clear All Bookings</button>
+      </div>
+
+      <button class="btn btn-gold btn-full" onclick="saveSettings()">Save All Settings →</button>
+    </div>`;
+  updateNoticePreview();
+}
+function updateNoticePreview(){
+  const el=document.getElementById('s-notice');
+  const prev=document.getElementById('notice-preview');
+  if(el&&prev)prev.innerHTML=el.value;
+}
+async function saveSettings(){
+  settings.hotelName   = document.getElementById('s-hotelname').value;
+  settings.tagline     = document.getElementById('s-tagline').value;
+  settings.headline    = document.getElementById('s-headline').value;
+  settings.phone       = document.getElementById('s-phone').value;
+  settings.accountName = document.getElementById('s-accname').value;
+  settings.bankName    = document.getElementById('s-bank').value;
+  settings.accountNo   = document.getElementById('s-accno').value;
+  settings.reservationNotice   = document.getElementById('s-notice').value;
+  settings.reservationHoldHours= parseInt(document.getElementById('s-holdhours').value)||2;
+  await saveData();showToast('Settings saved ✓');
+}
+
+// ─── QR CODES ─────────────────────────────────────
+function renderQRCodes(){
+  let html='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">';
+  rooms.forEach(room=>{html+=`<div class="card" style="text-align:center"><div style="font-size:24px;margin-bottom:6px">${room.emoji}</div><div style="font-size:13px;font-weight:600;color:var(--cream);margin-bottom:2px">${room.name}</div><div style="font-size:10px;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px">${room.type==='lodging'?'Lodging':'Short Rest'}</div><button class="btn btn-gold btn-sm btn-full" onclick="openQRModal('${room.id}')">View & Print QR</button></div>`;});
+  html+='</div><div class="alert alert-info" style="margin-top:16px">Print each QR code and place it inside the room. Guests can scan to book that specific room directly from their phone.</div>';
+  document.getElementById('main-content').innerHTML=html;
+}
+function openQRModal(roomId){
+  const room=getRoom(roomId);
+  document.getElementById('qr-modal-title').textContent=room.name+' — QR Code';
+  const link=window.location.href.replace('dashboard.html','customer-booking.html').split('?')[0]+'?room='+roomId;
+  document.getElementById('qr-modal-link').textContent=link;
+  const box=document.getElementById('qr-modal-box');box.innerHTML='';
+  try{new QRCode(box,{text:link,width:160,height:160,colorDark:'#0D0D0D',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});}
+  catch(e){box.innerHTML='<div style="font-size:11px;color:#888;padding:20px">QR Ready</div>';}
+  openModal('qr-modal');
+}
+function printQRModal(){
+  const canvas=document.querySelector('#qr-modal-box canvas');
+  const name=document.getElementById('qr-modal-title').textContent;
+  const link=document.getElementById('qr-modal-link').textContent;
+  const w=window.open('','_blank');
+  w.document.write(`<html><head><title>${name}</title><style>body{display:flex;flex-direction:column;align-items:center;font-family:Georgia,serif;padding:40px;background:#fff;text-align:center}@media print{button{display:none}}</style></head><body><h2>${name}</h2><p style="font-size:12px;color:#888;margin-bottom:24px">SleepInn & Cool — Scan to Book</p>${canvas?`<img src="${canvas.toDataURL()}" width="220">`:'<p>QR unavailable</p>'}<p style="font-size:10px;color:#aaa;margin-top:16px;word-break:break-all;max-width:220px">${link}</p><br><button onclick="window.print()" style="padding:10px 24px;cursor:pointer">Print</button></body></html>`);
+  w.document.close();
+}
+
+// ─── MODAL / SIDEBAR / TOAST ──────────────────────
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('sidebar-overlay').classList.add('open');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebar-overlay').classList.remove('open');}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
+
+// ─── 1-second countdown tick ──────────────────────
+setInterval(()=>{
+  document.querySelectorAll('[data-countdown]').forEach(el=>{
+    const b=bookings.find(bk=>bk.id===el.getAttribute('data-countdown'));
+    if(b&&b.status==='confirmed'){const rem=b.checkoutTime-Date.now();el.textContent='⏱ '+fmtCD(Math.max(0,rem));const p=document.getElementById('prog-'+b.id);if(p)p.style.width=pct(b)+'%';}
+  });
+},1000);
+</script>
+</body>
+</html>
