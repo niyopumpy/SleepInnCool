@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
-:root{--gold:#C9A84C;--gold-light:#E8C97A;--ink:#0D0D0D;--ink2:#111108;--cream:#FAF7F2;--muted:#6B6457;--border:rgba(201,168,76,0.25);--border2:rgba(255,255,255,0.08);--radius:4px;--radius-lg:12px}
+:root{--gold:#C9A84C;--gold-light:#E8C97A;--ink:#4A3F2F;--ink2:#5C503D;--cream:#FAF7F2;--muted:#C4B49A;--border:rgba(201,168,76,0.25);--border2:rgba(255,255,255,0.08);--radius:4px;--radius-lg:12px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--cream);min-height:100vh;overflow-x:hidden}
 .sync-bar{position:fixed;top:0;left:0;right:0;z-index:500;height:3px}
@@ -18,12 +18,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--cream);m
 .sync-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 1s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 60px;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(201,168,76,0.12) 0%,transparent 60%),linear-gradient(180deg,#0D0D0D 0%,#1a1408 40%,#0D0D0D 100%);z-index:0}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(201,168,76,0.12) 0%,transparent 60%),linear-gradient(180deg,#4A3F2F 0%,#3A3020 40%,#4A3F2F 100%);z-index:0}
 .hero-pattern{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(201,168,76,0.04) 39px,rgba(201,168,76,0.04) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(201,168,76,0.04) 39px,rgba(201,168,76,0.04) 40px);z-index:0}
-.hotel-crown{text-align:center;padding:60px 24px 40px;position:relative;z-index:1}
+.hotel-crown{text-align:center;padding:60px 24px 40px;position:relative;z-index:1;overflow:hidden}
 .crown-line{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 24px}
 .hotel-eyebrow{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
-.hotel-name{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,10vw,56px);font-weight:600;line-height:1.05;color:var(--cream);margin-bottom:8px}
+.hotel-name{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,10vw,56px);font-weight:600;line-height:1.05;color:var(--cream);margin-bottom:8px;display:inline-block;animation:marquee 10s ease-in-out infinite;white-space:nowrap}
 .hotel-name span{color:var(--gold)}
 .hotel-tagline{font-size:13px;color:var(--muted);letter-spacing:1px;margin-bottom:32px}
 .hero-content{position:relative;z-index:1;padding:0 24px;max-width:520px;margin:0 auto;width:100%}
@@ -34,6 +34,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--cream);m
 .scroll-hint p{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
 .scroll-arrow{width:20px;height:20px;border-right:1px solid var(--gold);border-bottom:1px solid var(--gold);transform:rotate(45deg);margin:0 auto;animation:bounce 2s infinite}
 @keyframes bounce{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(6px)}}
+@keyframes marquee{0%{transform:translateX(100vw)}40%{transform:translateX(0)}60%{transform:translateX(0)}100%{transform:translateX(-100vw)}}
 .section{padding:60px 24px;max-width:520px;margin:0 auto}
 .section-label{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
 .section-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:var(--cream);margin-bottom:32px}
@@ -47,12 +48,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--cream);m
 .room-club-badge{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.7);border:0.5px solid var(--gold);color:var(--gold);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px}
 .room-status-badge{position:absolute;top:12px;right:12px;font-size:10px;padding:4px 10px;border-radius:2px;font-weight:500;letter-spacing:1px;text-transform:uppercase}
 .status-available{background:rgba(25,135,84,0.9);color:#fff}.status-occupied{background:rgba(220,53,69,0.9);color:#fff}
-.room-body{padding:18px;background:#111108}
+.room-body{padding:18px;background:#4A3F2F}
 .room-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--cream);margin-bottom:4px}
-.room-type-tag{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
-.room-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.room-type-tag{font-size:10px;color:#C4B49A;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.room-desc{font-size:13px;color:#D4C9B5;line-height:1.6;margin-bottom:14px}
 .room-meta{display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap}
-.room-meta-item{font-size:11px;color:var(--muted)}.room-meta-item strong{display:block;color:var(--cream);font-size:12px;margin-bottom:1px;font-weight:500}
+.room-meta-item{font-size:11px;color:#C4B49A}.room-meta-item strong{display:block;color:#FFFFFF;font-size:12px;margin-bottom:1px;font-weight:500}
 .room-footer{display:flex;align-items:center;justify-content:space-between;border-top:0.5px solid var(--border);padding-top:14px}
 .room-price{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--gold)}
 .room-price span{font-size:12px;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:400;margin-left:2px}
@@ -64,7 +65,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--cream);m
 .btn-full{width:100%;padding:14px;font-size:13px}
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;align-items:flex-end;justify-content:center}
 .overlay.open{display:flex}
-.modal{background:#111108;border:0.5px solid var(--border);border-radius:20px 20px 0 0;padding:28px 24px 40px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
+.modal{background:#5C503D;border:0.5px solid var(--border);border-radius:20px 20px 0 0;padding:28px 24px 40px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
 .modal-handle{width:36px;height:3px;background:#333;border-radius:2px;margin:0 auto 20px}
 .modal-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px}
 .modal-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--cream)}
@@ -75,7 +76,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--cream);m
 .form-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
 .form-input{width:100%;padding:12px 14px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.1);border-radius:var(--radius);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:14px;margin-bottom:16px;transition:border-color 0.2s}
 .form-input:focus{outline:none;border-color:var(--gold)}.form-input::placeholder{color:#555}
-select.form-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236B6457'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+select.form-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236B6457'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-color:rgba(255,255,255,0.04);color-scheme:dark}
+select.form-input option{background-color:#1a1a10;color:#FAF7F2}
 .summary-box{background:rgba(201,168,76,0.05);border:0.5px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:20px}
 .summary-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;font-size:13px;border-bottom:0.5px solid rgba(255,255,255,0.05)}
 .summary-row:last-child{border:none}.summary-row .key{color:var(--muted)}.summary-row .val{color:var(--cream);font-weight:500}
@@ -94,6 +96,18 @@ select.form-input{appearance:none;background-image:url("data:image/svg+xml,%3Csv
 .qr-inner{width:180px;height:180px;margin:0 auto 14px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink2);border:0.5px solid var(--gold);color:var(--cream);padding:12px 20px;border-radius:8px;font-size:13px;z-index:300;transition:transform 0.3s;max-width:90vw}
 .toast.show{transform:translateX(-50%) translateY(0)}
+/* Night picker (shared with dashboard) */
+.night-picker{display:flex;align-items:center;border:0.5px solid rgba(255,255,255,0.12);border-radius:var(--radius);overflow:hidden;background:rgba(255,255,255,0.04);margin-bottom:10px}
+.night-btn{width:48px;height:48px;background:rgba(255,255,255,0.04);border:none;color:var(--gold);font-size:24px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background 0.15s;line-height:1}
+.night-btn:hover{background:rgba(201,168,76,0.15)}.night-btn:active{background:rgba(201,168,76,0.25)}
+.night-input{flex:1;background:transparent;border:none;border-left:0.5px solid rgba(255,255,255,0.1);border-right:0.5px solid rgba(255,255,255,0.1);color:var(--cream);font-size:22px;font-weight:600;text-align:center;padding:10px 4px;min-width:0;-moz-appearance:textfield;font-family:'Cormorant Garamond',serif}
+.night-input::-webkit-outer-spin-button,.night-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.night-input:focus{outline:none;background:rgba(201,168,76,0.05)}
+.night-quick{padding:5px 10px;border-radius:var(--radius);border:0.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--muted);font-size:11px;cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.night-quick:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.08)}
+.cust-dur-btn{flex:1;padding:12px 8px;border-radius:var(--radius);border:0.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--muted);font-size:13px;cursor:pointer;transition:all 0.2s;text-align:center;line-height:1.5;font-family:'DM Sans',sans-serif}
+.cust-dur-btn:hover{border-color:var(--gold);color:var(--gold)}
+.cust-dur-btn.active{border-color:var(--gold);background:rgba(201,168,76,0.1);color:var(--cream)}
 footer{text-align:center;padding:40px 24px;border-top:0.5px solid var(--border);font-size:12px;color:var(--muted)}
 footer strong{color:var(--gold)}
 </style>
@@ -209,425 +223,309 @@ footer strong{color:var(--gold)}
 <div class="toast" id="toast"></div>
 
 <script>
-// CLOUD CONFIG
-const JSONBIN_BIN_ID = '69c2a678b7ec241ddc9b811f';
+// ═══════════════════════════════════════════════════
+// CLOUD CONFIG — fill these in after JSONBin signup
+// ═══════════════════════════════════════════════════
+const JSONBIN_BIN_ID  = '69c2a678b7ec241ddc9b811f';
 const JSONBIN_API_KEY = '$2a$10$.RKiM5QVhfls4qn49l5ju.aZrktEN6VXnI4DWwV9Rex6JLM9jk3m.';
-const BIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
-const POLL_MS = 20000;
+// Same values must be pasted in dashboard.html too!
+
+const BIN_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID;
+const POLL_MS  = 20000;
 
 const ROOMS_DEFAULT = [
-  {id:'manchester-united',name:'Manchester United',type:'lodging',price:15000,duration:'Per Night',checkIn:'2:00 PM',checkOut:'12:00 PM',desc:'A richly appointed lodging room radiating the spirit of champions. King-sized bed, climate control, en-suite bathroom, and premium toiletries.',color:'#8B0000',accent:'#cc0000',emoji:'\u26BD'},
-  {id:'barcelona',name:'Barcelona',type:'lodging',price:18000,duration:'Per Night',checkIn:'2:00 PM',checkOut:'12:00 PM',desc:'Elegant and modern \u2014 artistry and flair. Deluxe bed, workspace, and city-facing window.',color:'#004499',accent:'#0055cc',emoji:'\uD83D\uDD35'},
-  {id:'liverpool',name:'Liverpool',type:'lodging',price:14000,duration:'Per Night',checkIn:'2:00 PM',checkOut:'12:00 PM',desc:'Warm and welcoming lodge room with en-suite shower, smart TV, and complimentary breakfast for one.',color:'#8B0015',accent:'#c8102e',emoji:'\uD83D\uDD34'},
-  {id:'chelsea',name:'Chelsea',type:'shortrest',price:5000,duration:'Per 3 Hours',checkIn:'On Arrival',checkOut:'3 hrs later',desc:'Clean private short-rest suite \u2014 perfect for a quick refresh, power nap, or midday break. Includes shower and towels.',color:'#003399',accent:'#034694',emoji:'\uD83D\uDC99'},
-  {id:'arsenal',name:'Arsenal',type:'shortrest',price:4500,duration:'Per 3 Hours',checkIn:'On Arrival',checkOut:'3 hrs later',desc:'Compact and comfortable short-rest room with private bathroom, fresh linens, and full privacy.',color:'#8B1500',accent:'#EF0107',emoji:'\uD83D\uDD3A'}
+  {id:'manchester-united',name:'Manchester United',type:'lodging',  price:15000,duration:'Per Night',  checkIn:'2:00 PM',   checkOut:'12:00 PM',  desc:'A richly appointed lodging room radiating the spirit of champions. King-sized bed, climate control, en-suite bathroom, and premium toiletries.',color:'#8B0000',accent:'#cc0000',emoji:'⚽'},
+  {id:'barcelona',        name:'Barcelona',        type:'lodging',  price:18000,duration:'Per Night',  checkIn:'2:00 PM',   checkOut:'12:00 PM',  desc:'Elegant and modern — artistry and flair. Deluxe bed, workspace, and city-facing window.',                                                     color:'#004499',accent:'#0055cc',emoji:'🔵'},
+  {id:'liverpool',        name:'Liverpool',        type:'lodging',  price:14000,duration:'Per Night',  checkIn:'2:00 PM',   checkOut:'12:00 PM',  desc:'Warm and welcoming lodge room with en-suite shower, smart TV, and complimentary breakfast for one.',                                          color:'#8B0015',accent:'#c8102e',emoji:'🔴'},
+  {id:'chelsea',          name:'Chelsea',          type:'shortrest',price:5000, duration:'Per 3 Hours',checkIn:'On Arrival',checkOut:'3 hrs later',desc:'Clean private short-rest suite — perfect for a quick refresh, power nap, or midday break. Includes shower and towels.',                      color:'#003399',accent:'#034694',emoji:'💙'},
+  {id:'arsenal',          name:'Arsenal',          type:'shortrest',price:4500, duration:'Per 3 Hours',checkIn:'On Arrival',checkOut:'3 hrs later',desc:'Compact and comfortable short-rest room with private bathroom, fresh linens, and full privacy.',                                             color:'#8B1500',accent:'#EF0107',emoji:'🔺'}
 ];
-
 const SETTINGS_DEFAULT = {
-  tagline:'Your rest is our pride',
-  headline:'Choose Your Room',
-  hotelName:'SleepInn & Cool Hotel',
-  bankName:'First Bank of Nigeria',
-  accountNo:'3012345678',
-  accountName:'SleepInn & Cool Hotel',
+  tagline:'Your rest is our pride',headline:'Choose Your Room',
+  hotelName:'SleepInn & Cool Hotel',bankName:'First Bank of Nigeria',
+  accountNo:'3012345678',accountName:'SleepInn & Cool Hotel',
   phone:'+234 800 000 0000',
-  reservationNotice:'\uD83D\uDCE8 <strong>Payment by Bank Transfer<\/strong><br>After confirming, you\'ll receive our bank details and a unique reference code. Your room is reserved for <strong>2 hours<\/strong> pending payment confirmation.',
+  reservationNotice:'💳 <strong>Payment by Bank Transfer</strong><br>After confirming, you\'ll receive our bank details and a unique reference code. Your room is reserved for <strong>2 hours</strong> pending payment confirmation.',
   reservationHoldHours:2
 };
 
-let rooms = ROOMS_DEFAULT.map(r=>({...r}));
-let bookings = [];
-let settings = {...SETTINGS_DEFAULT};
-let selectedRoom = null;
-let bookingDraft = {};
-let pollTimer = null;
+let rooms=ROOMS_DEFAULT.map(r=>({...r})),bookings=[],settings={...SETTINGS_DEFAULT};
+let selectedRoom=null,bookingDraft={},pollTimer=null;
 
-const configured = () => JSONBIN_BIN_ID !== 'PASTE_YOUR_BIN_ID_HERE' && JSONBIN_API_KEY !== 'PASTE_YOUR_API_KEY_HERE';
+const configured=()=>JSONBIN_BIN_ID!=='PASTE_YOUR_BIN_ID_HERE'&&JSONBIN_API_KEY!=='PASTE_YOUR_API_KEY_HERE';
 
-function setSyncing(on, msg) {
-  if (!msg) msg = '';
-  document.getElementById('sync-bar').className = on ? 'sync-bar loading' : 'sync-bar';
-  var st = document.getElementById('sync-toast');
-  if (on && msg) {
-    document.getElementById('sync-msg').textContent = msg;
-    st.classList.add('show');
-  } else {
-    st.classList.remove('show');
-  }
+function setSyncing(on,msg=''){
+  document.getElementById('sync-bar').className=on?'sync-bar loading':'sync-bar';
+  const st=document.getElementById('sync-toast');
+  if(on&&msg){document.getElementById('sync-msg').textContent=msg;st.classList.add('show');}
+  else st.classList.remove('show');
 }
 
-async function cloudGet() {
-  var r = await fetch(BIN_URL + '/latest', {
-    headers: {'X-Access-Key': JSONBIN_API_KEY, 'X-Bin-Meta': 'false'}
-  });
-  if (!r.ok) throw new Error('HTTP ' + r.status);
+async function cloudGet(){
+  const r=await fetch(BIN_URL+'/latest',{headers:{'X-Access-Key':JSONBIN_API_KEY,'X-Bin-Meta':'false'}});
+  if(!r.ok)throw new Error('HTTP '+r.status);
   return r.json();
 }
-
-async function cloudPut(data) {
-  await fetch(BIN_URL, {
-    method: 'PUT',
-    headers: {'Content-Type': 'application/json', 'X-Access-Key': JSONBIN_API_KEY},
-    body: JSON.stringify(data)
-  });
+async function cloudPut(data){
+  await fetch(BIN_URL,{method:'PUT',headers:{'Content-Type':'application/json','X-Access-Key':JSONBIN_API_KEY},body:JSON.stringify(data)});
 }
 
-async function loadData() {
-  if (!configured()) {
-    var lr = localStorage.getItem('sic_rooms');
-    var lb = localStorage.getItem('sic_bookings');
-    var ls = localStorage.getItem('sic_settings');
-    if (lr) rooms = JSON.parse(lr);
-    if (lb) bookings = JSON.parse(lb);
-    if (ls) settings = Object.assign({}, SETTINGS_DEFAULT, JSON.parse(ls));
-    renderRooms();
-    applySettings();
-    showToast('\u26A0 Cloud not set up \u2014 data is device-local only');
+async function loadData(){
+  if(!configured()){
+    // localStorage fallback (same device only — shows setup warning)
+    const lr=localStorage.getItem('sic_rooms'),lb=localStorage.getItem('sic_bookings'),ls=localStorage.getItem('sic_settings');
+    if(lr)rooms=JSON.parse(lr); if(lb)bookings=JSON.parse(lb); if(ls)settings={...SETTINGS_DEFAULT,...JSON.parse(ls)};
+    renderRooms();applySettings();
+    showToast('⚠ Cloud not set up — data is device-local only');
     return;
   }
-  setSyncing(true, 'Loading\u2026');
-  try {
-    var data = await cloudGet();
-    if (data.rooms && data.rooms.length) rooms = data.rooms;
-    if (data.bookings) bookings = data.bookings;
-    if (data.settings && Object.keys(data.settings).length) settings = Object.assign({}, SETTINGS_DEFAULT, data.settings);
-    if (!data.rooms || !data.rooms.length) await cloudPut({rooms:rooms, bookings:bookings, settings:settings, schemaVersion:1});
-  } catch(e) {
-    console.error('Load error:', e);
-    showToast('Network error \u2014 showing cached data');
-  }
-  setSyncing(false);
-  renderRooms();
-  applySettings();
+  setSyncing(true,'Loading…');
+  try{
+    const data=await cloudGet();
+    if(data.rooms?.length)rooms=data.rooms;
+    if(data.bookings)bookings=data.bookings;
+    if(data.settings&&Object.keys(data.settings).length)settings={...SETTINGS_DEFAULT,...data.settings};
+    if(!data.rooms?.length)await cloudPut({rooms,bookings,settings,schemaVersion:1});
+  }catch(e){showToast('Network error — showing cached data');}
+  setSyncing(false);renderRooms();applySettings();
   startPolling();
 }
 
-async function saveData() {
-  if (!configured()) {
-    localStorage.setItem('sic_rooms', JSON.stringify(rooms));
-    localStorage.setItem('sic_bookings', JSON.stringify(bookings));
-    localStorage.setItem('sic_settings', JSON.stringify(settings));
-    return;
-  }
-  await cloudPut({rooms:rooms, bookings:bookings, settings:settings, schemaVersion:1});
+async function saveData(){
+  if(!configured()){localStorage.setItem('sic_rooms',JSON.stringify(rooms));localStorage.setItem('sic_bookings',JSON.stringify(bookings));localStorage.setItem('sic_settings',JSON.stringify(settings));return;}
+  await cloudPut({rooms,bookings,settings,schemaVersion:1});
 }
 
-function startPolling() {
-  if (pollTimer) clearInterval(pollTimer);
-  pollTimer = setInterval(async function() {
-    if (!configured()) return;
-    try {
-      var d = await cloudGet();
-      if (d.rooms && d.rooms.length) rooms = d.rooms;
-      if (d.bookings) bookings = d.bookings;
-      if (d.settings && Object.keys(d.settings).length) settings = Object.assign({}, SETTINGS_DEFAULT, d.settings);
-      renderRooms();
-      applySettings();
-    } catch(e) {}
-  }, POLL_MS);
+function startPolling(){
+  if(pollTimer)clearInterval(pollTimer);
+  pollTimer=setInterval(async()=>{
+    if(!configured())return;
+    try{const d=await cloudGet();if(d.rooms?.length)rooms=d.rooms;if(d.bookings)bookings=d.bookings;if(d.settings&&Object.keys(d.settings).length)settings={...SETTINGS_DEFAULT,...d.settings};renderRooms();applySettings();}catch(e){}
+  },POLL_MS);
 }
 
 function getActiveBooking(roomId) {
-  var now = Date.now();
-  return bookings.find(function(b) {
-    return b.roomId === roomId && b.status === 'confirmed' && b.checkoutTime > now;
-  });
+    const now = Date.now();
+    // Get hold duration from settings (defaulting to 2 hours), and convert to milliseconds
+    const holdDurationMs = (settings.reservationHoldHours || 2) * 3600000; 
+
+    return bookings.find(b => 
+        b.roomId === roomId && (
+            // EITHER the room is actively confirmed...
+            (b.status === 'confirmed' && b.checkoutTime > now) ||
+            // OR the room has a pending payment that has NOT yet expired.
+            (b.status === 'pending' && (now - b.createdAt) < holdDurationMs)
+        )
+    );
+}
+function genRef(){return 'SIC'+Date.now().toString().slice(-8).toUpperCase();}
+function fmtNaira(n){return '₦'+Number(n).toLocaleString();}
+
+function applySettings(){
+  document.getElementById('hero-tagline').textContent=settings.tagline||SETTINGS_DEFAULT.tagline;
+  document.getElementById('section-headline').textContent=settings.headline||SETTINGS_DEFAULT.headline;
+  document.getElementById('footer-name').textContent=settings.hotelName||SETTINGS_DEFAULT.hotelName;
+  document.getElementById('footer-phone').textContent=settings.phone||SETTINGS_DEFAULT.phone;
+  document.getElementById('suc-bank').textContent=settings.bankName||SETTINGS_DEFAULT.bankName;
+  document.getElementById('suc-accno').textContent=settings.accountNo||SETTINGS_DEFAULT.accountNo;
+  document.getElementById('suc-accname').textContent=settings.accountName||SETTINGS_DEFAULT.accountName;
+  document.getElementById('suc-phone').textContent=settings.phone||SETTINGS_DEFAULT.phone;
+  document.getElementById('reservation-notice').innerHTML=settings.reservationNotice||SETTINGS_DEFAULT.reservationNotice;
+  const hrs=settings.reservationHoldHours||2;
+  document.getElementById('success-sub-msg').innerHTML=`Please complete payment within <strong style="color:var(--gold)">${hrs} hour${hrs!=1?'s':''}</strong> to secure your room.`;
 }
 
-function genRef() {
-  return 'SIC' + Date.now().toString().slice(-8).toUpperCase();
-}
-
-function fmtNaira(n) {
-  return '\u20A6' + Number(n).toLocaleString();
-}
-
-function applySettings() {
-  document.getElementById('hero-tagline').textContent = settings.tagline || SETTINGS_DEFAULT.tagline;
-  document.getElementById('section-headline').textContent = settings.headline || SETTINGS_DEFAULT.headline;
-  document.getElementById('footer-name').textContent = settings.hotelName || SETTINGS_DEFAULT.hotelName;
-  document.getElementById('footer-phone').textContent = settings.phone || SETTINGS_DEFAULT.phone;
-  document.getElementById('suc-bank').textContent = settings.bankName || SETTINGS_DEFAULT.bankName;
-  document.getElementById('suc-accno').textContent = settings.accountNo || SETTINGS_DEFAULT.accountNo;
-  document.getElementById('suc-accname').textContent = settings.accountName || SETTINGS_DEFAULT.accountName;
-  document.getElementById('suc-phone').textContent = settings.phone || SETTINGS_DEFAULT.phone;
-  document.getElementById('reservation-notice').innerHTML = settings.reservationNotice || SETTINGS_DEFAULT.reservationNotice;
-  var hrs = settings.reservationHoldHours || 2;
-  document.getElementById('success-sub-msg').innerHTML = 'Please complete payment within <strong style="color:var(--gold)">' + hrs + ' hour' + (hrs !== 1 ? 's' : '') + '<\/strong> to secure your room.';
-}
-
-function renderRooms() {
-  document.getElementById('rooms-loading').style.display = 'none';
-  document.getElementById('lodging-wrap').style.display = 'block';
-  document.getElementById('shortrest-wrap').style.display = 'block';
-
-  ['lodging','shortrest'].forEach(function(type) {
-    var cont = document.getElementById(type + '-rooms');
-    cont.innerHTML = '';
-    rooms.filter(function(r){ return r.type === type; }).forEach(function(room, i) {
-      var booked = getActiveBooking(room.id);
-      var bg = room.bgImage
-        ? "background:url('" + room.bgImage + "') center/cover"
-        : "background:linear-gradient(135deg," + room.color + "," + room.accent + "20)";
-      var statusClass = booked ? 'status-occupied' : 'status-available';
-      var statusText = booked ? 'Occupied' : 'Available';
-      var bookBtn = booked
-        ? '<button class="btn btn-gold" disabled>Occupied<\/button>'
-        : '<button class="btn btn-gold" onclick="openBooking(\'' + room.id + '\',event)">Book Now<\/button>';
-      var typeLabel = type === 'lodging' ? '\uD83C\uDF19 Lodging \u00B7 Overnight' : '\u23F1 Short Rest \u00B7 Quick Refresh';
-
-      cont.innerHTML += '<div class="room-card" style="animation-delay:' + (i * 0.1 + 0.1) + 's">'
-        + '<div class="room-visual" style="' + bg + '">'
-        + '<div class="room-club-badge">' + room.emoji + ' ' + room.name + '<\/div>'
-        + '<div class="room-status-badge ' + statusClass + '">' + statusText + '<\/div>'
-        + '<\/div>'
-        + '<div class="room-body">'
-        + '<div class="room-name">' + room.name + '<\/div>'
-        + '<div class="room-type-tag">' + typeLabel + '<\/div>'
-        + '<p class="room-desc">' + room.desc + '<\/p>'
-        + '<div class="room-meta">'
-        + '<div class="room-meta-item"><strong>Check-in<\/strong>' + room.checkIn + '<\/div>'
-        + '<div class="room-meta-item"><strong>Check-out<\/strong>' + room.checkOut + '<\/div>'
-        + '<\/div>'
-        + '<div class="room-footer">'
-        + '<div class="room-price">' + fmtNaira(room.price) + '<span>' + room.duration + '<\/span><\/div>'
-        + '<div class="room-actions">'
-        + '<button class="btn btn-ghost" style="padding:8px 14px" onclick="openQR(\'' + room.id + '\',event)">QR<\/button>'
-        + bookBtn
-        + '<\/div><\/div><\/div><\/div>';
+function renderRooms(){
+  document.getElementById('rooms-loading').style.display='none';
+  document.getElementById('lodging-wrap').style.display='block';
+  document.getElementById('shortrest-wrap').style.display='block';
+  ['lodging','shortrest'].forEach(type=>{
+    const cont=document.getElementById(type+'-rooms');
+    cont.innerHTML='';
+    rooms.filter(r=>r.type===type).forEach((room,i)=>{
+      const booked=getActiveBooking(room.id);
+      const bg=room.bgImage?`background:url('${room.bgImage}') center/cover`:`background:linear-gradient(135deg,${room.color},${room.accent}20)`;
+      cont.innerHTML+=`
+        <div class="room-card" style="animation-delay:${i*0.1+0.1}s">
+          <div class="room-visual" style="${bg}">
+            <div class="room-club-badge">${room.emoji} ${room.name}</div>
+            <div class="room-status-badge ${booked?'status-occupied':'status-available'}">${booked?'Occupied':'Available'}</div>
+          </div>
+          <div class="room-body">
+            <div class="room-name">${room.name}</div>
+            <div class="room-type-tag">${type==='lodging'?'🌙 Lodging · Overnight':'⏱ Short Rest · Quick Refresh'}</div>
+            <p class="room-desc">${room.desc}</p>
+            <div class="room-meta">
+              <div class="room-meta-item"><strong>Check-in</strong>${room.checkIn}</div>
+              <div class="room-meta-item"><strong>Check-out</strong>${room.checkOut}</div>
+            </div>
+            <div class="room-footer">
+              <div class="room-price">${fmtNaira(room.price)}<span>${room.duration}</span></div>
+              <div class="room-actions">
+                <button class="btn btn-ghost" style="padding:8px 14px" onclick="openQR('${room.id}',event)">QR</button>
+                ${booked?`<button class="btn btn-gold" disabled>Occupied</button>`:`<button class="btn btn-gold" onclick="openBooking('${room.id}',event)">Book Now</button>`}
+              </div>
+            </div>
+          </div>
+        </div>`;
     });
   });
 }
 
-function openQR(roomId, e) {
-  if (e) e.stopPropagation();
-  var room = rooms.find(function(r){ return r.id === roomId; });
-  document.getElementById('qr-room-title').textContent = room.name + ' \u2014 QR Code';
-  document.getElementById('qr-display-name').textContent = room.name;
-  var link = window.location.href.split('?')[0] + '?room=' + roomId;
-  document.getElementById('qr-display-link').textContent = link;
-  var box = document.getElementById('qr-box');
-  box.innerHTML = '';
-  try {
-    new QRCode(box, {text:link, width:160, height:160, colorDark:'#0D0D0D', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.H});
-  } catch(err) {
-    box.innerHTML = '<div style="font-size:11px;color:#888;padding:20px">QR Ready<\/div>';
-  }
+function openQR(roomId,e){
+  if(e)e.stopPropagation();
+  const room=rooms.find(r=>r.id===roomId);
+  document.getElementById('qr-room-title').textContent=room.name+' — QR Code';
+  document.getElementById('qr-display-name').textContent=room.name;
+  const link=window.location.href.split('?')[0]+'?room='+roomId;
+  document.getElementById('qr-display-link').textContent=link;
+  const box=document.getElementById('qr-box');box.innerHTML='';
+  try{new QRCode(box,{text:link,width:160,height:160,colorDark:'#0D0D0D',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});}
+  catch(err){box.innerHTML='<div style="font-size:11px;color:#888;padding:20px">QR Ready</div>';}
   openModal('qr-overlay');
 }
-
-function printQR() {
-  var canvas = document.querySelector('#qr-box canvas');
-  var name = document.getElementById('qr-display-name').textContent;
-  var link = document.getElementById('qr-display-link').textContent;
-  var w = window.open('', '_blank');
-  var html = '<html><head><title>QR - ' + name + '<\/title>';
-  html += '<style>body{display:flex;flex-direction:column;align-items:center;font-family:Georgia,serif;padding:40px;background:#fff;text-align:center}@media print{button{display:none}}<\/style>';
-  html += '<\/head><body>';
-  html += '<h2>' + name + '<\/h2>';
-  html += '<p style="font-size:12px;color:#888;margin-bottom:20px">SleepInn & Cool \u2014 Scan to Book<\/p>';
-  if (canvas) {
-    html += '<img src="' + canvas.toDataURL() + '" width="200">';
-  } else {
-    html += '<p>QR unavailable<\/p>';
-  }
-  html += '<p style="font-size:10px;color:#aaa;margin-top:16px;word-break:break-all;max-width:200px">' + link + '<\/p>';
-  html += '<br><button onclick="window.print()" style="padding:10px 24px">Print<\/button>';
-  html += '<\/body><\/html>';
-  w.document.write(html);
+function printQR(){
+  const canvas=document.querySelector('#qr-box canvas');
+  const name=document.getElementById('qr-display-name').textContent;
+  const link=document.getElementById('qr-display-link').textContent;
+  const w=window.open('','_blank');
+  w.document.write(`<html><head><title>QR - ${name}</title><style>body{display:flex;flex-direction:column;align-items:center;font-family:Georgia,serif;padding:40px;background:#fff;text-align:center}@media print{button{display:none}}</style></head><body><h2>${name}</h2><p style="font-size:12px;color:#888;margin-bottom:20px">SleepInn & Cool — Scan to Book</p>${canvas?`<img src="${canvas.toDataURL()}" width="200">`:'<p>QR unavailable</p>'}<p style="font-size:10px;color:#aaa;margin-top:16px;word-break:break-all;max-width:200px">${link}</p><br><button onclick="window.print()" style="padding:10px 24px">Print</button></body></html>`);
   w.document.close();
 }
 
-function openBooking(roomId, e) {
-  if (e) e.stopPropagation();
-  selectedRoom = rooms.find(function(r){ return r.id === roomId; });
-  if (!selectedRoom) return;
-  bookingDraft = {};
-  document.getElementById('modal-room-name').textContent = selectedRoom.name;
-  document.getElementById('modal-room-type').textContent = selectedRoom.type === 'lodging' ? '\uD83C\uDF19 Lodging Room' : '\u23F1 Short-Rest Room';
-  ['g-name','g-phone','g-email'].forEach(function(id){ document.getElementById(id).value = ''; });
-  goStep(1);
-  openModal('booking-overlay');
+function openBooking(roomId,e){
+  if(e)e.stopPropagation();
+  selectedRoom=rooms.find(r=>r.id===roomId);
+  if(!selectedRoom)return;
+  bookingDraft={};
+  document.getElementById('modal-room-name').textContent=selectedRoom.name;
+  document.getElementById('modal-room-type').textContent=selectedRoom.type==='lodging'?'🌙 Lodging Room':'⏱ Short-Rest Room';
+  ['g-name','g-phone','g-email'].forEach(id=>document.getElementById(id).value='');
+  goStep(1);openModal('booking-overlay');
 }
 
-function goStep(n) {
-  [1,2,3,4].forEach(function(i) {
-    document.getElementById('step-' + i).style.display = (i === n) ? 'block' : 'none';
-    var pip = document.getElementById('pip' + i);
-    if (pip) pip.classList.toggle('done', i <= n);
-  });
-  ['step1-error','step2-error','step3-error'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.style.display = 'none';
-  });
+function goStep(n){
+  [1,2,3,4].forEach(i=>{document.getElementById('step-'+i).style.display=i===n?'block':'none';document.getElementById('pip'+i)?.classList.toggle('done',i<=n);});
+  ['step1-error','step2-error','step3-error'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
 }
 
-function goStep2() {
-  var name = document.getElementById('g-name').value.trim();
-  var phone = document.getElementById('g-phone').value.trim();
-  var el = document.getElementById('step1-error');
-  if (!name || name.length < 2) { el.textContent = 'Please enter your full name.'; el.style.display = 'block'; return; }
-  if (!phone || phone.length < 10) { el.textContent = 'Please enter a valid phone number.'; el.style.display = 'block'; return; }
-  bookingDraft = {name:name, phone:phone, email:document.getElementById('g-email').value.trim()};
-  buildStep2Fields();
-  goStep(2);
+function goStep2(){
+  const name=document.getElementById('g-name').value.trim(),phone=document.getElementById('g-phone').value.trim();
+  const el=document.getElementById('step1-error');
+  if(!name||name.length<2){el.textContent='Please enter your full name.';el.style.display='block';return;}
+  if(!phone||phone.length<10){el.textContent='Please enter a valid phone number.';el.style.display='block';return;}
+  bookingDraft={name,phone,email:document.getElementById('g-email').value.trim()};
+  buildStep2Fields();goStep(2);
 }
 
-function buildStep2Fields() {
-  var r = selectedRoom;
-  var today = new Date().toISOString().split('T')[0];
-  var html = '';
-  if (r.type === 'lodging') {
-    html = '<label class="form-label">Check-in Date<\/label><input class="form-input" type="date" id="b-date" value="' + today + '" min="' + today + '">';
-    html += '<label class="form-label">Number of Nights<\/label><select class="form-input" id="b-nights">';
-    [1,2,3,4,5,7].forEach(function(n) {
-      html += '<option value="' + n + '">' + n + ' Night' + (n > 1 ? 's' : '') + ' \u2014 ' + fmtNaira(r.price * n) + '<\/option>';
-    });
-    html += '<\/select>';
-    html += '<label class="form-label">Special Requests (optional)<\/label><input class="form-input" id="b-notes" placeholder="e.g. extra pillow, early check-in">';
+function buildStep2Fields(){
+  const r=selectedRoom,today=new Date().toISOString().split('T')[0];
+  let html='';
+  if(r.type==='lodging'){
+    html=`<label class="form-label">Check-in Date</label>
+      <input class="form-input" type="date" id="b-date" value="${today}" min="${today}">
+      <label class="form-label">Number of Nights</label>
+      <div class="night-picker">
+        <button type="button" class="night-btn" onclick="custAdjNights(-1)">−</button>
+        <input type="number" class="night-input" id="b-nights" value="1" min="1" max="365"
+          oninput="custClampNights(this)" onchange="custClampNights(this)">
+        <button type="button" class="night-btn" onclick="custAdjNights(1)">+</button>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px">
+        ${[1,2,3,5,7,10,14,21,30].map(n=>`<button type="button" class="night-quick" onclick="custSetNights(${n})">${n}N</button>`).join('')}
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:16px">Type any number or use quick-select. Rate: ${fmtNaira(r.price)} / night.</div>
+      <label class="form-label">Special Requests (optional)</label>
+      <input class="form-input" id="b-notes" placeholder="e.g. extra pillow, early check-in">`;
   } else {
-    var now = new Date();
-    var hhmm = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-    html = '<label class="form-label">Expected Arrival Time<\/label><input class="form-input" type="time" id="b-time" value="' + hhmm + '">';
-    html += '<label class="form-label">Duration<\/label><select class="form-input" id="b-hours">';
-    html += '<option value="3">3 Hours \u2014 ' + fmtNaira(r.price) + '<\/option>';
-    html += '<option value="6">6 Hours \u2014 ' + fmtNaira(r.price * 2) + '<\/option>';
-    html += '<\/select>';
+    const now=new Date(),hhmm=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+    html=`<label class="form-label">Expected Arrival Time</label>
+      <input class="form-input" type="time" id="b-time" value="${hhmm}">
+      <label class="form-label">Duration</label>
+      <div style="display:flex;gap:10px;margin-bottom:16px">
+        <button type="button" class="cust-dur-btn active" id="cdur-3" onclick="custSetDur(3)">3 Hours<br><small>${fmtNaira(r.price)}</small></button>
+        <button type="button" class="cust-dur-btn" id="cdur-6" onclick="custSetDur(6)">6 Hours<br><small>${fmtNaira(r.price*2)}</small></button>
+      </div>
+      <input type="hidden" id="b-hours" value="3">`;
   }
-  document.getElementById('step2-fields').innerHTML = html;
+  document.getElementById('step2-fields').innerHTML=html;
+}
+function custAdjNights(d){const i=document.getElementById('b-nights');if(!i)return;let v=(parseInt(i.value)||1)+d;if(v<1)v=1;if(v>365)v=365;i.value=v;}
+function custClampNights(i){let v=parseInt(i.value);if(isNaN(v)||v<1)v=1;if(v>365)v=365;i.value=v;}
+function custSetNights(n){const i=document.getElementById('b-nights');if(i)i.value=n;}
+function custSetDur(h){document.getElementById('b-hours').value=h;document.querySelectorAll('.cust-dur-btn').forEach(b=>b.classList.remove('active'));const btn=document.getElementById('cdur-'+h);if(btn)btn.classList.add('active');}
+
+// ─── PRICING HELPER — mirrors dashboard logic ─────
+function getPriceForNights(room, nights){
+  if(!room.priceTiers||!room.priceTiers.length) return room.price*nights;
+  const sorted=[...room.priceTiers].sort((a,b)=>b.nights-a.nights);
+  const match=sorted.find(t=>nights>=t.nights);
+  if(!match) return room.price*nights;
+  if(nights===match.nights) return match.price;
+  return Math.round((match.price/match.nights)*nights);
 }
 
-function goStep3() {
-  var r = selectedRoom;
-  var total = r.price, nights = 1, hours = 3, date = '', time = '', notes = '';
-  if (r.type === 'lodging') {
-    date = document.getElementById('b-date').value;
-    nights = parseInt(document.getElementById('b-nights').value);
-    var notesEl = document.getElementById('b-notes');
-    notes = notesEl ? notesEl.value : '';
-    if (!date) {
-      var el = document.getElementById('step2-error');
-      el.textContent = 'Please select a check-in date.';
-      el.style.display = 'block';
-      return;
-    }
-    total = r.price * nights;
-    bookingDraft.date = date;
-    bookingDraft.nights = nights;
-    bookingDraft.notes = notes;
-    bookingDraft.hours = null;
-    bookingDraft.time = null;
+function goStep3(){
+  const r=selectedRoom;let total=r.price,nights=1,hours=3,date='',time='',notes='';
+  if(r.type==='lodging'){
+    date=document.getElementById('b-date').value;
+    nights=Math.max(1,parseInt(document.getElementById('b-nights').value)||1);
+    notes=document.getElementById('b-notes')?.value||'';
+    if(!date){const el=document.getElementById('step2-error');el.textContent='Please select a check-in date.';el.style.display='block';return;}
+    total=getPriceForNights(r,nights);
+    bookingDraft={...bookingDraft,date,nights,notes,hours:null,time:null};
   } else {
-    time = document.getElementById('b-time').value;
-    hours = parseInt(document.getElementById('b-hours').value);
-    total = r.price * (hours / 3);
-    bookingDraft.time = time;
-    bookingDraft.hours = hours;
-    bookingDraft.date = null;
-    bookingDraft.nights = null;
+    time=document.getElementById('b-time').value;
+    hours=parseInt(document.getElementById('b-hours').value);
+    total=r.price*(hours/3);
+    bookingDraft={...bookingDraft,time,hours,date:null,nights:null};
   }
-  bookingDraft.total = total;
-
-  var rows = [
-    ['Room', r.name],
-    ['Type', r.type === 'lodging' ? 'Overnight Lodging' : 'Short Rest'],
-    r.type === 'lodging' ? ['Check-in', date + ' at ' + r.checkIn] : ['Arrival', time],
-    r.type === 'lodging' ? ['Duration', nights + ' Night' + (nights > 1 ? 's' : '')] : ['Duration', hours + ' Hours'],
-    ['Guest', bookingDraft.name],
-    ['Phone', bookingDraft.phone],
-    ['TOTAL', fmtNaira(total)]
+  bookingDraft.total=total;
+  const baseTotal = r.type==='lodging' ? r.price*nights : total;
+  const saved = baseTotal - total;
+  const rows=[
+    ['Room',r.name],
+    ['Type',r.type==='lodging'?'Overnight Lodging':'Short Rest'],
+    r.type==='lodging'?['Check-in',`${date} at ${r.checkIn}`]:['Arrival',time],
+    r.type==='lodging'?['Duration',`${nights} Night${nights>1?'s':''}`]:['Duration',`${hours} Hours`],
+    ['Guest',bookingDraft.name],['Phone',bookingDraft.phone],
+    ['TOTAL',fmtNaira(total)]
   ];
-  if (notes) rows.splice(-1, 0, ['Requests', notes]);
-
-  document.getElementById('booking-summary').innerHTML = rows.map(function(row) {
-    return '<div class="summary-row ' + (row[0] === 'TOTAL' ? 'total' : '') + '"><span class="key">' + row[0] + '<\/span><span class="val">' + row[1] + '<\/span><\/div>';
-  }).join('');
-
+  if(notes)rows.splice(-1,0,['Requests',notes]);
+  document.getElementById('booking-summary').innerHTML=rows.map(row=>`<div class="summary-row ${row[0]==='TOTAL'?'total':''}"><span class="key">${row[0]}</span><span class="val">${row[1]}</span></div>`).join('')
+    + (saved>0?`<div style="font-size:12px;color:#5ddb95;padding:8px 0 2px;border-top:0.5px solid rgba(255,255,255,0.05)">🎉 You save ${fmtNaira(saved)} with the ${nights}-night rate!</div>`:'');
   goStep(3);
 }
 
-async function confirmBooking() {
-  var btn = document.getElementById('confirm-btn');
-  btn.disabled = true;
-  btn.textContent = 'Saving\u2026';
-
-  var ref = genRef();
-  var now = Date.now();
-  var r = selectedRoom;
-  var checkinTime = now, checkoutTime;
-
-  if (r.type === 'lodging') {
-    checkinTime = new Date(bookingDraft.date + 'T14:00:00').getTime();
-    checkoutTime = checkinTime + bookingDraft.nights * 86400000;
+async function confirmBooking(){
+  const btn=document.getElementById('confirm-btn');btn.disabled=true;btn.textContent='Saving…';
+  const ref=genRef(),now=Date.now(),r=selectedRoom;
+  let checkinTime=now,checkoutTime;
+  if(r.type==='lodging'){
+    checkinTime=new Date(bookingDraft.date+'T14:00:00').getTime();checkoutTime=checkinTime+bookingDraft.nights*86400000;
   } else {
-    var parts = (bookingDraft.time || '12:00').split(':');
-    var d = new Date();
-    d.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
-    checkinTime = d.getTime();
-    checkoutTime = checkinTime + bookingDraft.hours * 3600000;
+    const[hh,mm]=(bookingDraft.time||'12:00').split(':').map(Number);
+    const d=new Date();d.setHours(hh,mm,0,0);checkinTime=d.getTime();checkoutTime=checkinTime+bookingDraft.hours*3600000;
   }
-
-  bookings.push({
-    id: ref,
-    roomId: r.id,
-    roomName: r.name,
-    type: r.type,
-    guest: bookingDraft.name,
-    phone: bookingDraft.phone,
-    email: bookingDraft.email,
-    total: bookingDraft.total,
-    payMethod: 'bank-transfer',
-    status: 'pending',
-    checkinTime: checkinTime,
-    checkoutTime: checkoutTime,
-    createdAt: now,
-    notes: bookingDraft.notes || '',
-    walkIn: false,
-    nights: bookingDraft.nights || null,
-    hours: bookingDraft.hours || null
-  });
-
-  setSyncing(true, 'Saving booking\u2026');
+  bookings.push({id:ref,roomId:r.id,roomName:r.name,type:r.type,guest:bookingDraft.name,phone:bookingDraft.phone,email:bookingDraft.email,total:bookingDraft.total,payMethod:'bank-transfer',status:'pending',checkinTime,checkoutTime,createdAt:now,notes:bookingDraft.notes||'',walkIn:false,nights:bookingDraft.nights||null,hours:bookingDraft.hours||null});
+  setSyncing(true,'Saving booking…');
   await saveData();
   setSyncing(false);
-
-  document.getElementById('success-ref').textContent = ref;
-  document.getElementById('success-amount').textContent = fmtNaira(bookingDraft.total);
-  document.getElementById('success-summary').innerHTML =
-    '<div class="summary-row"><span class="key">Reference<\/span><span class="val" style="color:var(--gold);font-family:monospace">' + ref + '<\/span><\/div>' +
-    '<div class="summary-row"><span class="key">Room<\/span><span class="val">' + r.name + '<\/span><\/div>' +
-    '<div class="summary-row"><span class="key">Guest<\/span><span class="val">' + bookingDraft.name + '<\/span><\/div>';
-
-  btn.disabled = false;
-  btn.textContent = 'Confirm Reservation \u2192';
+  document.getElementById('success-ref').textContent=ref;
+  document.getElementById('success-amount').textContent=fmtNaira(bookingDraft.total);
+  document.getElementById('success-summary').innerHTML=`<div class="summary-row"><span class="key">Reference</span><span class="val" style="color:var(--gold);font-family:monospace">${ref}</span></div><div class="summary-row"><span class="key">Room</span><span class="val">${r.name}</span></div><div class="summary-row"><span class="key">Guest</span><span class="val">${bookingDraft.name}</span></div>`;
+  btn.disabled=false;btn.textContent='Confirm Reservation →';
   goStep(4);
 }
 
-function openModal(id) {
-  document.getElementById(id).classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
+function openModal(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3500);}
 
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function showToast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show'); }, 3500);
-}
-
-loadData().then(function() {
-  var p = new URLSearchParams(window.location.search).get('room');
-  if (p) {
-    setTimeout(function() {
-      var r = rooms.find(function(rm){ return rm.id === p; });
-      if (r) openBooking(p, null);
-    }, 800);
-  }
+loadData().then(()=>{
+  const p=new URLSearchParams(window.location.search).get('room');
+  if(p)setTimeout(()=>{const r=rooms.find(r=>r.id===p);if(r)openBooking(p,null);},800);
 });
-</script></body>
+</script>
+</body>
 </html>

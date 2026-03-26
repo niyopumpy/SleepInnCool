@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
-:root{--gold:#C9A84C;--gold-light:#E8C97A;--ink:#0D0D0D;--ink2:#111108;--surface:#1A1A14;--surface2:#1F1F18;--cream:#FAF7F2;--cream2:#D4CFC6;--muted:#6B6457;--muted2:#4A4640;--border:rgba(201,168,76,0.2);--border2:rgba(255,255,255,0.07);--success:#198754;--danger:#dc3545;--radius:4px;--radius-lg:12px;--radius-xl:16px;--sidebar:220px}
+:root{--gold:#C9A84C;--gold-light:#E8C97A;--ink:#1C1C18;--ink2:#252520;--surface:#2E2E28;--surface2:#363630;--cream:#FAF7F2;--cream2:#D4CFC6;--muted:#8A8070;--muted2:#5E5A52;--border:rgba(201,168,76,0.28);--border2:rgba(255,255,255,0.10);--success:#198754;--danger:#dc3545;--radius:4px;--radius-lg:12px;--radius-xl:16px;--sidebar:220px}
 *{box-sizing:border-box;margin:0;padding:0}html,body{height:100%;overflow:hidden}
 body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--cream);font-size:14px}
 .app-shell{display:flex;height:100vh;overflow:hidden}
@@ -79,7 +79,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--cream);f
 .form-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px}
 .form-input{width:100%;padding:10px 12px;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.1);border-radius:var(--radius);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:13px;transition:border-color 0.2s}
 .form-input:focus{outline:none;border-color:var(--gold)}.form-input::placeholder{color:var(--muted2)}
-select.form-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236B6457'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+select.form-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23C9A84C'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-color:var(--surface2);color:var(--cream) !important;color-scheme:dark}
+select.form-input option{background-color:#2E2E28;color:#FAF7F2}
 textarea.form-input{resize:vertical;min-height:80px;line-height:1.5}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .form-hint{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}
@@ -102,7 +103,7 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.5}
 .modal-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0;line-height:1}.modal-close:hover{color:var(--cream)}
 .modal-footer{display:flex;gap:8px;margin-top:20px;padding-top:16px;border-top:0.5px solid var(--border2)}
 .modal-footer .btn{flex:1}
-.login-shell{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--ink);background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(201,168,76,0.03) 39px,rgba(201,168,76,0.03) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(201,168,76,0.03) 39px,rgba(201,168,76,0.03) 40px)}
+.login-shell{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#222218;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(201,168,76,0.04) 39px,rgba(201,168,76,0.04) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(201,168,76,0.04) 39px,rgba(201,168,76,0.04) 40px)}
 .login-box{background:var(--ink2);border:0.5px solid var(--border);border-radius:var(--radius-xl);padding:40px 32px;width:100%;max-width:360px}
 .login-logo{text-align:center;margin-bottom:32px}
 .login-logo-name{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold);letter-spacing:1px}
@@ -114,8 +115,27 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.5}
 .toast{position:fixed;bottom:20px;right:20px;background:var(--surface);border:0.5px solid var(--gold);color:var(--cream);padding:12px 18px;border-radius:8px;font-size:13px;z-index:400;transform:translateX(120%);transition:transform 0.3s;max-width:320px}
 .toast.show{transform:translateX(0)}
 /* notice preview box */
-.notice-preview{background:rgba(201,168,76,0.1);border:0.5px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-size:13px;line-height:1.6;color:var(--gold-light);margin-bottom:12px}
+.notice-preview{background:rgba(201,168,76,0.1);border:0.5px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-size:13px;line-height:1.6;color:var(--gold-light);margin-bottom:12px;word-wrap:break-word;overflow-wrap:break-word;word-break:break-word;white-space:normal;overflow:hidden}
 .notice-preview strong{color:var(--gold)}
+/* Night picker */
+.night-picker{display:flex;align-items:center;gap:0;border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--surface2)}
+.night-btn{width:44px;height:44px;background:var(--surface);border:none;color:var(--gold);font-size:22px;font-weight:400;cursor:pointer;flex-shrink:0;transition:background 0.15s;display:flex;align-items:center;justify-content:center;line-height:1}
+.night-btn:hover{background:rgba(201,168,76,0.15)}
+.night-btn:active{background:rgba(201,168,76,0.25)}
+.night-input{flex:1;background:transparent;border:none;border-left:0.5px solid var(--border2);border-right:0.5px solid var(--border2);color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;text-align:center;padding:8px 4px;min-width:0;-moz-appearance:textfield}
+.night-input::-webkit-outer-spin-button,.night-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.night-input:focus{outline:none;background:rgba(201,168,76,0.05)}
+.night-quick{padding:5px 10px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--surface2);color:var(--muted);font-size:11px;cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.night-quick:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.08)}
+/* Duration buttons (short-rest) */
+.dur-btn{flex:1;padding:12px 8px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--surface2);color:var(--muted);font-size:13px;cursor:pointer;transition:all 0.2s;text-align:center;line-height:1.5;font-family:'DM Sans',sans-serif}
+.dur-btn:hover{border-color:var(--gold);color:var(--gold)}
+.dur-btn.active{border-color:var(--gold);background:rgba(201,168,76,0.12);color:var(--cream)}
+/* Walk-in total display box */
+.wi-total-box{background:rgba(201,168,76,0.07);border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:16px;font-size:13px;color:var(--muted)}
+/* Tier pricing rows in edit room modal */
+.tier-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface2);border-radius:var(--radius);margin-bottom:6px;border:0.5px solid var(--border2)}
+.tier-row .form-input{background:var(--surface);margin-bottom:0}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:2px}
 @media(max-width:640px){.sidebar{position:fixed;left:-220px;top:0;bottom:0;z-index:100;transition:left 0.3s}.sidebar.open{left:0}.form-row{grid-template-columns:1fr}.stat-grid{grid-template-columns:1fr 1fr}}
 @media(min-width:641px){.mobile-menu-btn{display:none!important}}
@@ -136,10 +156,12 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.5}
     </div>
     <div id="login-err" class="alert alert-error" style="display:none"></div>
     <div class="form-group"><label class="form-label">Username</label><input class="form-input" id="l-user" placeholder="Username" autocomplete="username"></div>
-    <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="l-pass" placeholder="Password" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="l-pass" placeholder="Password" type="password" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <button class="btn btn-gold btn-full" onclick="doLogin()">Sign In →</button>
     <div class="credential-hint">
-      Demo: <code>admin / admin123</code> &nbsp;|&nbsp; <code>staff1 / staff123</code> &nbsp;|&nbsp; <code>staff2 / staff456</code>
+      <span style="display:block;margin-bottom:4px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Demo accounts</span>
+      <span style="color:var(--gold-light)">admin</span> &nbsp;·&nbsp; <span style="color:var(--gold-light)">staff1</span> &nbsp;·&nbsp; <span style="color:var(--gold-light)">staff2</span><br>
+      <span style="font-size:10px;color:var(--muted2)">Contact your administrator for passwords.</span>
     </div>
   </div>
 </div>
@@ -220,6 +242,22 @@ let rooms=ROOMS_DEFAULT.map(r=>({...r})),bookings=[],settings={...SETTINGS_DEFAU
 let currentUser=null,currentRole=null,currentPage='overview';
 let editingRoomId=null,checkoutBookingId=null,pollTimer=null;
 
+// ─── SESSION PERSISTENCE ──────────────────────────
+// Saves login state to sessionStorage so a page refresh doesn't log the user out.
+// sessionStorage is cleared automatically when the browser tab is closed.
+function saveSession(){sessionStorage.setItem('sic_session',JSON.stringify({user:currentUser,role:currentRole,page:currentPage}));}
+function clearSession(){sessionStorage.removeItem('sic_session');}
+function restoreSession(){
+  const raw=sessionStorage.getItem('sic_session');
+  if(!raw)return false;
+  try{
+    const s=JSON.parse(raw);
+    if(!s.user||!CREDENTIALS[s.user])return false;
+    currentUser=s.user;currentRole=s.role;currentPage=s.page||'overview';
+    return true;
+  }catch(e){return false;}
+}
+
 // ─── CLOUD ────────────────────────────────────────
 const configured=()=>JSONBIN_BIN_ID!=='PASTE_YOUR_BIN_ID_HERE'&&JSONBIN_API_KEY!=='PASTE_YOUR_API_KEY_HERE';
 
@@ -264,23 +302,68 @@ function mergeData(d){
   if(d.settings&&Object.keys(d.settings).length)settings={...SETTINGS_DEFAULT,...d.settings};
 }
 
-function startPolling(){
-  if(pollTimer)clearInterval(pollTimer);
-  pollTimer=setInterval(async()=>{
-    if(!configured())return;
-    try{const d=await cloudGet();mergeData(d);setSyncStatus('ok');updatePendingBadge();
-      // live update countdowns without full re-render
-      document.querySelectorAll('[data-countdown]').forEach(el=>{
-        const b=bookings.find(bk=>bk.id===el.getAttribute('data-countdown'));
-        if(b&&b.status==='confirmed'){const rem=b.checkoutTime-Date.now();el.textContent='⏱ '+fmtCD(Math.max(0,rem));const p=document.getElementById('prog-'+b.id);if(p)p.style.width=pct(b)+'%';}
-      });
-    }catch(e){setSyncStatus('error');}
-  },POLL_MS);
-}
+function startPolling() {
+    if (pollTimer) clearInterval(pollTimer);
+    pollTimer = setInterval(async () => {
+        if (!configured()) return;
+        
+        let needsSave = false; // A flag to check if we need to update the database
+        const now = Date.now();
+        const holdDurationMs = (settings.reservationHoldHours || 2) * 3600000;
 
+        // --- START: NEW AUTOMATIC EXPIRATION LOGIC ---
+        bookings.forEach(b => {
+            // Find pending bookings that are older than the hold duration
+            if (b.status === 'pending' && (now - b.createdAt) > holdDurationMs) {
+                b.status = 'expired'; // Change the status
+                needsSave = true;     // Mark that we need to save our changes
+            }
+        });
+
+        // If any bookings were changed to 'expired', save the data back to the cloud
+        if (needsSave) {
+            await saveData();
+            // We can optionally show a toast or log that we cleaned up expired bookings
+            console.log('Cleaned up and expired old pending bookings.');
+        }
+        // --- END: NEW AUTOMATIC EXPIRATION LOGIC ---
+
+        try {
+            const d = await cloudGet();
+            mergeData(d);
+            setSyncStatus('ok');
+            updatePendingBadge();
+            // live update countdowns without full re-render
+            document.querySelectorAll('[data-countdown]').forEach(el => {
+                const b = bookings.find(bk => bk.id === el.getAttribute('data-countdown'));
+                if (b && b.status === 'confirmed') {
+                    const rem = b.checkoutTime - Date.now();
+                    el.textContent = '' + fmtCD(Math.max(0, rem));
+                    const p = document.getElementById('prog-' + b.id);
+                    if (p) p.style.width = pct(b) + '%';
+                }
+            });
+        } catch (e) {
+            setSyncStatus('error');
+        }
+    }, POLL_MS);
+}
 // ─── HELPERS ──────────────────────────────────────
 function getRoom(id){return rooms.find(r=>r.id===id);}
-function getActiveBooking(roomId){const now=Date.now();return bookings.find(b=>b.roomId===roomId&&b.status==='confirmed'&&b.checkoutTime>now);}
+function getActiveBooking(roomId) {
+    const now = Date.now();
+    // Get hold duration from settings (defaulting to 2 hours), and convert to milliseconds
+    const holdDurationMs = (settings.reservationHoldHours || 2) * 3600000; 
+
+    return bookings.find(b => 
+        b.roomId === roomId && (
+            // EITHER the room is actively confirmed...
+            (b.status === 'confirmed' && b.checkoutTime > now) ||
+            // OR the room has a pending payment that has NOT yet expired.
+            (b.status === 'pending' && (now - b.createdAt) < holdDurationMs)
+        )
+    );
+}
 function getPending(){return bookings.filter(b=>b.status==='pending').length;}
 function fmtNaira(n){return '₦'+Number(n).toLocaleString();}
 function fmtDate(ts){return ts?new Date(ts).toLocaleDateString('en-NG',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';}
@@ -290,21 +373,33 @@ function genRef(){return 'SIC'+Date.now().toString().slice(-8).toUpperCase();}
 function updatePendingBadge(){const n=getPending(),el=document.getElementById('pending-badge');if(el){el.textContent=n;el.style.display=n>0?'inline':'none';}}
 
 // ─── AUTH ─────────────────────────────────────────
+function bootApp(){
+  document.getElementById('login-page').style.display='none';
+  document.getElementById('app-shell').style.display='flex';
+  document.getElementById('sb-user-name').textContent=CREDENTIALS[currentUser].name;
+  document.getElementById('sb-user-role').textContent=currentRole==='admin'?'★ Administrator':'Staff';
+  document.querySelectorAll('.admin-only').forEach(el=>el.style.display=currentRole==='admin'?'':'none');
+  loadData().then(()=>navigate(currentPage));
+}
 function doLogin(){
   const user=document.getElementById('l-user').value.trim(),pass=document.getElementById('l-pass').value;
   const err=document.getElementById('login-err');
   if(CREDENTIALS[user]&&CREDENTIALS[user].pass===pass){
-    currentUser=user;currentRole=CREDENTIALS[user].role;
+    currentUser=user;currentRole=CREDENTIALS[user].role;currentPage='overview';
     err.style.display='none';
-    document.getElementById('login-page').style.display='none';
-    document.getElementById('app-shell').style.display='flex';
-    document.getElementById('sb-user-name').textContent=CREDENTIALS[user].name;
-    document.getElementById('sb-user-role').textContent=currentRole==='admin'?'★ Administrator':'Staff';
-    document.querySelectorAll('.admin-only').forEach(el=>el.style.display=currentRole==='admin'?'':'none');
-    loadData().then(()=>{navigate('overview');});
+    saveSession();
+    bootApp();
   } else {err.style.display='block';err.textContent='Incorrect username or password.';}
 }
-function doLogout(){currentUser=null;currentRole=null;if(pollTimer)clearInterval(pollTimer);document.getElementById('app-shell').style.display='none';document.getElementById('login-page').style.display='flex';document.getElementById('l-user').value='';document.getElementById('l-pass').value='';}
+function doLogout(){
+  currentUser=null;currentRole=null;
+  clearSession();
+  if(pollTimer)clearInterval(pollTimer);
+  document.getElementById('app-shell').style.display='none';
+  document.getElementById('login-page').style.display='flex';
+  document.getElementById('l-user').value='';
+  document.getElementById('l-pass').value='';
+}
 
 // ─── NAVIGATION ───────────────────────────────────
 function navigate(page){
@@ -368,16 +463,27 @@ function renderRooms(){
 
 // ─── BOOKINGS ─────────────────────────────────────
 function renderBookings(){
-  document.getElementById('topbar-actions-slot').innerHTML=`<select id="bk-filter" onchange="renderBookings()" style="background:var(--surface);border:0.5px solid var(--border2);color:var(--cream);padding:6px 10px;border-radius:var(--radius);font-size:12px"><option value="all">All</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="checkedout">Checked Out</option></select>`;
-  const filter=document.getElementById('bk-filter')?.value||'all';
-  const sorted=[...bookings].sort((a,b)=>b.createdAt-a.createdAt);
-  const filtered=filter==='all'?sorted:sorted.filter(b=>b.status===filter);
-  const summary=['pending','confirmed','checkedout'].map(s=>`<span class="badge ${s==='confirmed'?'badge-green':s==='pending'?'badge-amber':'badge-blue'}" style="margin-right:6px">${s}: ${bookings.filter(b=>b.status===s).length}</span>`).join('');
-  if(!filtered.length){document.getElementById('main-content').innerHTML=`<div style="margin-bottom:12px">${summary}</div><p style="color:var(--muted);padding:20px 0">No bookings found.</p>`;return;}
-  const rows=filtered.map(b=>`<tr><td><span style="font-family:monospace;font-size:11px;color:var(--gold)">${b.id}</span></td><td><strong style="color:var(--cream)">${b.guest}</strong><br><span style="color:var(--muted);font-size:11px">${b.phone}</span></td><td>${b.roomName}</td><td><strong style="color:var(--gold)">${fmtNaira(b.total)}</strong></td><td><span class="badge ${b.status==='confirmed'?'badge-green':b.status==='checkedout'?'badge-blue':b.status==='pending'?'badge-amber':'badge-gray'}">${b.status}</span></td><td><span class="badge ${b.walkIn?'badge-blue':'badge-gray'}">${b.walkIn?'Walk-in':'Online'}</span></td><td>${new Date(b.createdAt).toLocaleDateString('en-NG',{day:'2-digit',month:'short'})}</td><td style="white-space:nowrap"><button class="btn btn-ghost btn-sm" onclick="viewBooking('${b.id}')" style="margin-right:4px">View</button>${b.status==='pending'?`<button class="btn btn-success btn-sm" onclick="confirmPay('${b.id}')" style="margin-right:4px">✓ Pay</button>`:''}${currentRole==='admin'?`<button class="btn btn-danger btn-sm" onclick="deleteBooking('${b.id}')">Del</button>`:''}</td></tr>`).join('');
-  document.getElementById('main-content').innerHTML=`<div style="margin-bottom:16px">${summary}</div><div class="table-wrap"><table class="data-table"><thead><tr><th>Ref</th><th>Guest</th><th>Room</th><th>Amount</th><th>Status</th><th>Source</th><th>Date</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+    document.getElementById('topbar-actions-slot').innerHTML=`<select id="bk-filter" onchange="renderBookings()" style="background:var(--surface);border:0.5px solid var(--border2);color:var(--cream);padding:6px 10px;border-radius:var(--radius);font-size:12px"><option value="all">All</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="checkedout">Checked Out</option></select>`;
+    const filter=document.getElementById('bk-filter')?.value||'all';
+    const sorted=[...bookings].sort((a,b)=>b.createdAt-a.createdAt);
+    const filtered=filter==='all'?sorted:sorted.filter(b=>b.status===filter);
+    const summary=['pending','confirmed','checkedout'].map(s=>`<span class="badge ${s==='confirmed'?'badge-green':s==='pending'?'badge-amber':'badge-blue'}" style="margin-right:6px">${s}: ${bookings.filter(b=>b.status===s).length}</span>`).join('');
+    if(!filtered.length){document.getElementById('main-content').innerHTML=`<div style="margin-bottom:12px">${summary}</div><p style="color:var(--muted);padding:20px 0">No bookings found.</p>`;return;}
+    
+    // This is the part that builds each row of the table
+    const rows=filtered.map(b=>`<tr><td><span style="font-family:monospace;font-size:11px;color:var(--gold)">${b.id}</span></td><td><strong style="color:var(--cream)">${b.guest}</strong><br><span style="color:var(--muted);font-size:11px">${b.phone}</span></td><td>${b.roomName}</td><td><strong style="color:var(--gold)">${fmtNaira(b.total)}</strong></td><td><span class="badge ${b.status==='confirmed'?'badge-green':b.status==='checkedout'?'badge-blue':b.status==='pending'?'badge-amber':'badge-gray'}">${b.status}</span></td><td><span class="badge ${b.walkIn?'badge-blue':'badge-gray'}">${b.walkIn?'Walk-in':'Online'}</span></td>
+    
+    <td>${fmtDate(b.createdAt)}</td> 
+    
+    <td style="white-space:nowrap"><button class="btn btn-ghost btn-sm" onclick="viewBooking('${b.id}')" style="margin-right:4px">View</button>${b.status==='pending'?`<button class="btn btn-success btn-sm" onclick="confirmPay('${b.id}')" style="margin-right:4px">√ Pay</button>`:''}${currentRole==='admin'?`<button class="btn btn-danger btn-sm" onclick="deleteBooking('${b.id}')">Del</button>`:''}</td></tr>`).join('');
+    
+    // And this is the part that builds the final HTML for the page
+    document.getElementById('main-content').innerHTML=`<div style="margin-bottom:16px">${summary}</div><div class="table-wrap"><table class="data-table"><thead><tr><th>Ref</th><th>Guest</th><th>Room</th><th>Amount</th><th>Status</th><th>Source</th>
+    
+    <th>Date & Time</th>
+    
+    <th>Actions</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
-
 // ─── CHECK IN/OUT ─────────────────────────────────
 function renderCheckin(){
   document.getElementById('main-content').innerHTML=`<div style="max-width:480px"><div class="card"><div class="card-title">Look Up Booking</div><div class="form-group"><label class="form-label">Booking Reference</label><input class="form-input" id="ci-ref" placeholder="e.g. SIC12345678" style="text-transform:uppercase" onkeydown="if(event.key==='Enter')lookupBooking()"></div><button class="btn btn-gold" onclick="lookupBooking()">Search →</button></div><div id="ci-result" style="margin-top:16px"></div></div>`;
@@ -401,44 +507,154 @@ function lookupBooking(){
 function renderWalkIn(){
   const vacant=rooms.filter(r=>!getActiveBooking(r.id));
   if(!vacant.length){document.getElementById('main-content').innerHTML='<div class="alert alert-error">All rooms are currently occupied.</div>';return;}
-  document.getElementById('main-content').innerHTML=`<div style="max-width:480px"><div class="card"><div class="card-title">Walk-In Guest Details</div>
+  document.getElementById('main-content').innerHTML=`<div style="max-width:480px"><div class="card">
+    <div class="card-title">Walk-In Guest Details</div>
     <div class="form-group"><label class="form-label">Guest Full Name</label><input class="form-input" id="wi-name" placeholder="e.g. Chukwuemeka Obi"></div>
     <div class="form-group"><label class="form-label">Phone Number</label><input class="form-input" id="wi-phone" placeholder="08012345678" type="tel"></div>
-    <div class="form-group"><label class="form-label">Select Room</label><select class="form-input" id="wi-room" onchange="updateWalkInExtra()">${vacant.map(r=>`<option value="${r.id}">${r.emoji} ${r.name} — ${r.type==='lodging'?'Lodging':'Short Rest'} · ${fmtNaira(r.price)}</option>`).join('')}</select></div>
+    <div class="form-group"><label class="form-label">Select Room</label>
+      <select class="form-input" id="wi-room" onchange="updateWalkInExtra()">
+        ${vacant.map(r=>`<option value="${r.id}">${r.emoji} ${r.name} — ${r.type==='lodging'?'Lodging':'Short Rest'} · ${fmtNaira(r.price)}</option>`).join('')}
+      </select>
+    </div>
     <div id="wi-extra"></div>
-    <div class="form-group"><label class="form-label">Payment Method</label><select class="form-input" id="wi-pay"><option value="cash">Cash</option><option value="pos">POS / Card</option><option value="transfer">Bank Transfer</option></select></div>
-    <div id="wi-total" style="background:rgba(201,168,76,0.08);border:0.5px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:16px;font-size:13px;color:var(--muted)">Select room to see pricing.</div>
+    <div class="form-group"><label class="form-label">Payment Method</label>
+      <select class="form-input" id="wi-pay">
+        <option value="cash">Cash</option>
+        <option value="pos">POS / Card</option>
+        <option value="transfer">Bank Transfer</option>
+      </select>
+    </div>
+    <div id="wi-total" class="wi-total-box">Select a room to see pricing.</div>
     <div id="wi-err" class="alert alert-error" style="display:none"></div>
     <button class="btn btn-gold btn-full" onclick="submitWalkIn()">Confirm Walk-In →</button>
   </div></div>`;
   updateWalkInExtra();
 }
+
 function updateWalkInExtra(){
   const sel=document.getElementById('wi-room');if(!sel)return;
   const room=getRoom(sel.value);if(!room)return;
   const ex=document.getElementById('wi-extra');
-  if(room.type==='lodging'){ex.innerHTML=`<div class="form-group"><label class="form-label">Number of Nights</label><select class="form-input" id="wi-nights" onchange="calcWalkInTotal()">${[1,2,3,4,5,7].map(n=>`<option value="${n}">${n} Night${n>1?'s':''} — ${fmtNaira(room.price*n)}</option>`).join('')}</select></div>`;}
-  else{ex.innerHTML=`<div class="form-group"><label class="form-label">Duration</label><select class="form-input" id="wi-hours" onchange="calcWalkInTotal()"><option value="3">3 Hours — ${fmtNaira(room.price)}</option><option value="6">6 Hours — ${fmtNaira(room.price*2)}</option></select></div>`;}
+  if(room.type==='lodging'){
+    ex.innerHTML=`
+      <div class="form-group">
+        <label class="form-label">Number of Nights</label>
+        <div class="night-picker">
+          <button type="button" class="night-btn" onclick="adjustNights(-1)">−</button>
+          <input type="number" class="night-input" id="wi-nights" value="1" min="1" max="365"
+            oninput="clampNights(this);calcWalkInTotal()" onchange="clampNights(this);calcWalkInTotal()">
+          <button type="button" class="night-btn" onclick="adjustNights(1)">+</button>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
+          ${[1,2,3,5,7,10,14,21,30].map(n=>`<button type="button" class="night-quick" onclick="setNights(${n})">${n}N</button>`).join('')}
+        </div>
+        <div class="form-hint" style="margin-top:8px">Use − / + or type any number. Quick buttons: 1–30 nights. Price = ${fmtNaira(room.price)} × nights.</div>
+      </div>`;
+  } else {
+    ex.innerHTML=`
+      <div class="form-group">
+        <label class="form-label">Duration</label>
+        <div style="display:flex;gap:10px">
+          <button type="button" class="dur-btn active" id="dur-3" onclick="setDuration(3)">
+            3 Hours<br><small style="font-size:11px;opacity:0.8">${fmtNaira(room.price)}</small>
+          </button>
+          <button type="button" class="dur-btn" id="dur-6" onclick="setDuration(6)">
+            6 Hours<br><small style="font-size:11px;opacity:0.8">${fmtNaira(room.price*2)}</small>
+          </button>
+        </div>
+        <input type="hidden" id="wi-hours" value="3">
+      </div>`;
+  }
   calcWalkInTotal();
 }
+
+function adjustNights(delta){
+  const inp=document.getElementById('wi-nights');if(!inp)return;
+  let v=(parseInt(inp.value)||1)+delta;
+  if(v<1)v=1;if(v>365)v=365;
+  inp.value=v;calcWalkInTotal();
+}
+function clampNights(inp){
+  let v=parseInt(inp.value);
+  if(isNaN(v)||v<1)v=1;if(v>365)v=365;
+  inp.value=v;
+}
+function setNights(n){
+  const inp=document.getElementById('wi-nights');if(inp){inp.value=n;calcWalkInTotal();}
+}
+function setDuration(h){
+  document.getElementById('wi-hours').value=h;
+  document.querySelectorAll('.dur-btn').forEach(b=>b.classList.remove('active'));
+  const btn=document.getElementById('dur-'+h);if(btn)btn.classList.add('active');
+  calcWalkInTotal();
+}
+
+// ─── PRICING HELPER — respects tiered pricing ─────
+// Returns the total price for a given room and number of nights.
+// If the room has priceTiers, it finds the best matching tier (highest tier
+// whose nights count is <= the requested nights). Falls back to base price × nights.
+function getPriceForNights(room, nights){
+  if(!room.priceTiers || !room.priceTiers.length) return room.price * nights;
+  // Sort tiers descending so we find the highest qualifying one first
+  const sorted = [...room.priceTiers].sort((a,b)=>b.nights-a.nights);
+  const match  = sorted.find(t => nights >= t.nights);
+  if(!match) return room.price * nights; // below smallest tier — use base rate
+  // If nights exactly match the tier, return tier price
+  if(nights === match.nights) return match.price;
+  // If nights exceed the tier, extrapolate the per-night rate from that tier
+  const perNight = match.price / match.nights;
+  return Math.round(perNight * nights);
+}
+
 function calcWalkInTotal(){
   const sel=document.getElementById('wi-room');const room=getRoom(sel?.value);if(!room)return;
-  let total=room.price;
-  if(room.type==='lodging'){const n=parseInt(document.getElementById('wi-nights')?.value||'1');total=room.price*n;}
-  else{const h=parseInt(document.getElementById('wi-hours')?.value||'3');total=room.price*(h/3);}
-  document.getElementById('wi-total').innerHTML=`<div style="display:flex;justify-content:space-between"><span>Total Amount Due:</span><strong style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:20px">${fmtNaira(total)}</strong></div>`;
+  const box=document.getElementById('wi-total');if(!box)return;
+  if(room.type==='lodging'){
+    const nights=Math.max(1,parseInt(document.getElementById('wi-nights')?.value)||1);
+    const total=getPriceForNights(room, nights);
+    const baseTotal=room.price*nights;
+    const saved=baseTotal-total;
+    const checkoutDt=new Date(Date.now()+nights*86400000);
+    const checkoutStr=checkoutDt.toLocaleDateString('en-NG',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
+    box.innerHTML=`
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
+        <span style="color:var(--muted);font-size:12px">${nights} night${nights>1?'s':''}</span>
+        <strong style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:22px">${fmtNaira(total)}</strong>
+      </div>
+      ${saved>0?`<div style="font-size:11px;color:#5ddb95;margin-bottom:6px">You save ${fmtNaira(saved)} with the ${nights}-night rate 🎉</div>`:''}
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted)">
+        <span>Check-in: <strong style="color:var(--cream2)">Now</strong></span>
+        <span>Check-out: <strong style="color:var(--cream2)">${checkoutStr}</strong></span>
+      </div>`;
+  } else {
+    const hours=parseInt(document.getElementById('wi-hours')?.value||'3');
+    const total=room.price*(hours/3);
+    box.innerHTML=`
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span style="color:var(--muted);font-size:12px">${hours} hours</span>
+        <strong style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:22px">${fmtNaira(total)}</strong>
+      </div>`;
+  }
 }
+
 async function submitWalkIn(){
-  const name=document.getElementById('wi-name').value.trim(),phone=document.getElementById('wi-phone').value.trim();
-  const roomId=document.getElementById('wi-room').value,pay=document.getElementById('wi-pay').value;
+  const name=document.getElementById('wi-name').value.trim();
+  const phone=document.getElementById('wi-phone').value.trim();
+  const roomId=document.getElementById('wi-room').value;
+  const pay=document.getElementById('wi-pay').value;
   const err=document.getElementById('wi-err');
   if(!name||name.length<2){err.textContent='Enter guest full name.';err.style.display='block';return;}
   if(!phone||phone.length<10){err.textContent='Enter a valid phone number.';err.style.display='block';return;}
   const room=getRoom(roomId),ref=genRef(),now=Date.now();
-  let total=room.price,checkoutTime;
-  if(room.type==='lodging'){const n=parseInt(document.getElementById('wi-nights')?.value||'1');total=room.price*n;checkoutTime=now+n*86400000;}
-  else{const h=parseInt(document.getElementById('wi-hours')?.value||'3');total=room.price*(h/3);checkoutTime=now+h*3600000;}
-  bookings.push({id:ref,roomId,roomName:room.name,type:room.type,guest:name,phone,email:'',total,payMethod:pay,status:'confirmed',checkinTime:now,checkoutTime,createdAt:now,notes:'',walkIn:true});
+  let total=room.price,nights=1,hours=3,checkoutTime;
+  if(room.type==='lodging'){
+    nights=Math.max(1,parseInt(document.getElementById('wi-nights')?.value)||1);
+    total=getPriceForNights(room,nights);checkoutTime=now+nights*86400000;
+  } else {
+    hours=parseInt(document.getElementById('wi-hours')?.value||'3');
+    total=room.price*(hours/3);checkoutTime=now+hours*3600000;
+  }
+  bookings.push({id:ref,roomId,roomName:room.name,type:room.type,guest:name,phone,email:'',total,payMethod:pay,status:'confirmed',checkinTime:now,checkoutTime,createdAt:now,notes:'',walkIn:true,nights:room.type==='lodging'?nights:null,hours:room.type==='shortrest'?hours:null});
   await saveData();showToast('✓ Walk-in booked! Ref: '+ref);updatePendingBadge();navigate('overview');
 }
 
@@ -479,43 +695,133 @@ function openCheckout(id){
 function renderEditRooms(){
   let html='';
   rooms.forEach((room,i)=>{
+    // Show base price OR tier summary
+    const tierSummary = room.type==='lodging' && room.priceTiers && room.priceTiers.length
+      ? room.priceTiers.map(t=>`${t.nights}N=₦${(t.price/1000).toFixed(0)}k`).join(' · ')
+      : fmtNaira(room.price)+' base';
     html+=`<div class="card" style="border-left:3px solid ${room.accent||room.color}">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><span style="font-size:24px">${room.emoji}</span><div style="flex:1"><div style="font-size:15px;font-weight:600;color:var(--cream)">${room.name}</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">${room.type==='lodging'?'Lodging':'Short Rest'}</div></div><strong style="color:var(--gold)">${fmtNaira(room.price)}</strong></div>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:10px">${room.desc}</p>
-      <div style="display:flex;gap:8px"><button class="btn btn-gold btn-sm" onclick="openEditRoom('${room.id}')">Edit</button><button class="btn btn-ghost btn-sm" onclick="openQRModal('${room.id}')">QR</button><button class="btn btn-ghost btn-sm" onclick="resetRoom(${i})" style="color:var(--muted)">Reset</button></div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+        <span style="font-size:24px">${room.emoji}</span>
+        <div style="flex:1">
+          <div style="font-size:15px;font-weight:600;color:var(--cream)">${room.name}</div>
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">${room.type==='lodging'?'Lodging':'Short Rest'}</div>
+        </div>
+        <strong style="color:var(--gold);font-size:13px">${fmtNaira(room.price)}</strong>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:6px">${room.desc}</p>
+      ${room.type==='lodging'&&room.priceTiers&&room.priceTiers.length
+        ? `<p style="font-size:11px;color:var(--gold);margin-bottom:10px;opacity:0.8">Tiers: ${tierSummary}</p>`
+        : ''}
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-gold btn-sm" onclick="openEditRoom('${room.id}')">Edit</button>
+        <button class="btn btn-ghost btn-sm" onclick="openQRModal('${room.id}')">QR</button>
+        <button class="btn btn-ghost btn-sm" onclick="resetRoom(${i})" style="color:var(--muted)">Reset</button>
+      </div>
     </div>`;
   });
   document.getElementById('main-content').innerHTML=html;
 }
+
 function openEditRoom(roomId){
-  editingRoomId=roomId;const room=getRoom(roomId);
+  editingRoomId=roomId;
+  const room=getRoom(roomId);
+
+  // Build existing tiers or a default starter set
+  const defaultLodgingTiers = [
+    {nights:1,  price: room.price},
+    {nights:2,  price: room.price*2},
+    {nights:3,  price: room.price*3},
+    {nights:7,  price: room.price*7},
+  ];
+  const tiers = (room.priceTiers && room.priceTiers.length) ? room.priceTiers : (room.type==='lodging' ? defaultLodgingTiers : []);
+
+  const tiersJson = JSON.stringify(tiers).replace(/"/g,'&quot;');
+
+  const tiersHtml = room.type==='lodging' ? `
+    <div class="form-group" style="margin-top:4px">
+      <label class="form-label" style="margin-bottom:8px">Tiered Pricing <span style="font-size:10px;color:var(--muted);text-transform:none;letter-spacing:0">(optional — set different rates for longer stays)</span></label>
+      <div class="form-hint" style="margin-bottom:10px">
+        The <strong style="color:var(--cream)">Base Price</strong> above is used for any night count that doesn't match a tier. Add tiers for weekly deals, extended-stay discounts, etc. The system picks the <em>best matching tier</em> — the one whose night count is closest without exceeding the guest's stay.
+      </div>
+      <div id="tier-rows" style="margin-bottom:10px"></div>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="addTierRow()" style="width:100%">+ Add Tier</button>
+    </div>` : '';
+
   document.getElementById('edit-room-content').innerHTML=`
     <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="er-desc">${room.desc}</textarea></div>
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Price (₦)</label><input class="form-input" type="number" id="er-price" value="${room.price}"></div>
+      <div class="form-group">
+        <label class="form-label">Base Price (₦)</label>
+        <input class="form-input" type="number" id="er-price" value="${room.price}" min="0">
+        <div class="form-hint">Used when no tier matches.</div>
+      </div>
       <div class="form-group"><label class="form-label">Duration Label</label><input class="form-input" id="er-duration" value="${room.duration}"></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Check-in Time</label><input class="form-input" id="er-checkin" value="${room.checkIn}"></div>
       <div class="form-group"><label class="form-label">Check-out Time</label><input class="form-input" id="er-checkout" value="${room.checkOut}"></div>
     </div>
+    ${tiersHtml}
     <div class="form-row">
       <div class="form-group"><label class="form-label">Emoji / Icon</label><input class="form-input" id="er-emoji" value="${room.emoji}" maxlength="4"></div>
       <div class="form-group"><label class="form-label">Accent Colour</label><input type="color" class="form-input" id="er-color" value="${room.accent||room.color}" style="height:38px;padding:4px 8px;cursor:pointer"></div>
     </div>
     <div class="form-group"><label class="form-label">Background Image URL (optional)</label><input class="form-input" id="er-bgimg" value="${room.bgImage||''}" placeholder="https://…"></div>`;
+
+  // Populate tier rows via DOM (not template) to avoid escaping issues
+  if(room.type==='lodging'){
+    tiers.forEach(t => _addTierRowDOM(t.nights, t.price));
+  }
   openModal('edit-room-modal');
 }
+
+// Adds a tier row to the DOM directly
+function _addTierRowDOM(nights, price){
+  const cont = document.getElementById('tier-rows');
+  if(!cont) return;
+  const row = document.createElement('div');
+  row.className = 'tier-row';
+  row.innerHTML = `
+    <div style="display:flex;align-items:center;gap:6px;flex:1">
+      <span style="font-size:11px;color:var(--muted);white-space:nowrap">From</span>
+      <input type="number" class="form-input tier-nights" placeholder="Nights" min="1" max="365" style="width:80px;text-align:center;padding:8px 6px" value="${nights||''}">
+      <span style="font-size:11px;color:var(--muted);white-space:nowrap">nights →</span>
+      <span style="font-size:11px;color:var(--muted);white-space:nowrap">Total ₦</span>
+      <input type="number" class="form-input tier-price" placeholder="Total price" min="0" style="flex:1;padding:8px 10px" value="${price||''}">
+    </div>
+    <button type="button" class="btn btn-danger btn-sm" style="flex-shrink:0;padding:6px 10px" onclick="this.closest('.tier-row').remove()">✕</button>`;
+  cont.appendChild(row);
+}
+
+function addTierRow(){ _addTierRowDOM('', ''); }
+
+// Read all tier rows from DOM
+function readTiers(){
+  const rows = document.querySelectorAll('#tier-rows .tier-row');
+  const tiers = [];
+  rows.forEach(row => {
+    const n = parseInt(row.querySelector('.tier-nights').value);
+    const p = parseInt(row.querySelector('.tier-price').value);
+    if(!isNaN(n) && n>0 && !isNaN(p) && p>0) tiers.push({nights:n, price:p});
+  });
+  // Sort ascending by nights
+  tiers.sort((a,b)=>a.nights-b.nights);
+  return tiers;
+}
+
 async function saveRoomEdit(){
   const room=getRoom(editingRoomId);if(!room)return;
-  room.desc=document.getElementById('er-desc').value;
-  room.price=parseInt(document.getElementById('er-price').value)||room.price;
-  room.duration=document.getElementById('er-duration').value;
-  room.checkIn=document.getElementById('er-checkin').value;
-  room.checkOut=document.getElementById('er-checkout').value;
-  room.emoji=document.getElementById('er-emoji').value;
-  room.accent=room.color=document.getElementById('er-color').value;
-  room.bgImage=document.getElementById('er-bgimg').value;
+  room.desc     = document.getElementById('er-desc').value;
+  room.price    = parseInt(document.getElementById('er-price').value)||room.price;
+  room.duration = document.getElementById('er-duration').value;
+  room.checkIn  = document.getElementById('er-checkin').value;
+  room.checkOut = document.getElementById('er-checkout').value;
+  room.emoji    = document.getElementById('er-emoji').value;
+  room.accent   = room.color = document.getElementById('er-color').value;
+  room.bgImage  = document.getElementById('er-bgimg').value;
+  if(room.type==='lodging'){
+    room.priceTiers = readTiers();
+  }
   await saveData();closeModal('edit-room-modal');showToast('Room updated ✓');renderEditRooms();
 }
 async function resetRoom(index){if(!confirm('Reset to defaults?'))return;rooms[index]={...ROOMS_DEFAULT[index]};await saveData();showToast('Room reset');renderEditRooms();}
@@ -523,64 +829,63 @@ async function resetRoom(index){if(!confirm('Reset to defaults?'))return;rooms[i
 // ─── SETTINGS (Admin) — includes reservation notice editor ──
 function renderSettings(){
   const hrs=settings.reservationHoldHours||2;
-  const notice=settings.reservationNotice||SETTINGS_DEFAULT.reservationNotice;
+  // Build the settings HTML without embedding the notice text inside a template literal
+  // (avoids HTML-escaping problems with quotes and tags in the notice value)
   document.getElementById('main-content').innerHTML=`
     <div style="max-width:540px">
       <div class="card">
         <div class="card-title">Hotel Identity</div>
-        <div class="form-group"><label class="form-label">Hotel Name</label><input class="form-input" id="s-hotelname" value="${settings.hotelName||''}"></div>
-        <div class="form-group"><label class="form-label">Tagline (Customer Page Hero)</label><input class="form-input" id="s-tagline" value="${settings.tagline||''}"></div>
-        <div class="form-group"><label class="form-label">Room Section Headline</label><input class="form-input" id="s-headline" value="${settings.headline||''}"></div>
-        <div class="form-group"><label class="form-label">Hotel Phone / WhatsApp</label><input class="form-input" id="s-phone" value="${settings.phone||''}"></div>
+        <div class="form-group"><label class="form-label">Hotel Name</label><input class="form-input" id="s-hotelname" value="${(settings.hotelName||'').replace(/"/g,'&quot;')}"></div>
+        <div class="form-group"><label class="form-label">Tagline (Customer Page Hero)</label><input class="form-input" id="s-tagline" value="${(settings.tagline||'').replace(/"/g,'&quot;')}"></div>
+        <div class="form-group"><label class="form-label">Room Section Headline</label><input class="form-input" id="s-headline" value="${(settings.headline||'').replace(/"/g,'&quot;')}"></div>
+        <div class="form-group"><label class="form-label">Hotel Phone / WhatsApp</label><input class="form-input" id="s-phone" value="${(settings.phone||'').replace(/"/g,'&quot;')}"></div>
       </div>
-
       <div class="card">
         <div class="card-title">Bank Transfer Details</div>
-        <div class="form-group"><label class="form-label">Account Name</label><input class="form-input" id="s-accname" value="${settings.accountName||''}"></div>
-        <div class="form-group"><label class="form-label">Bank Name</label><input class="form-input" id="s-bank" value="${settings.bankName||''}"></div>
-        <div class="form-group"><label class="form-label">Account Number</label><input class="form-input" id="s-accno" value="${settings.accountNo||''}"></div>
+        <div class="form-group"><label class="form-label">Account Name</label><input class="form-input" id="s-accname" value="${(settings.accountName||'').replace(/"/g,'&quot;')}"></div>
+        <div class="form-group"><label class="form-label">Bank Name</label><input class="form-input" id="s-bank" value="${(settings.bankName||'').replace(/"/g,'&quot;')}"></div>
+        <div class="form-group"><label class="form-label">Account Number</label><input class="form-input" id="s-accno" value="${(settings.accountNo||'').replace(/"/g,'&quot;')}"></div>
       </div>
-
       <div class="card" style="border-color:rgba(201,168,76,0.35)">
         <div class="card-title" style="color:var(--gold)">✎ Customer Reservation Notice</div>
-        <p class="form-hint" style="margin-bottom:12px">This message appears on the booking page (Step 3) when the customer is about to confirm their reservation. You can use <code style="color:var(--gold-light);font-family:monospace">&lt;strong&gt;…&lt;/strong&gt;</code> for bold text and <code style="color:var(--gold-light);font-family:monospace">&lt;br&gt;</code> for line breaks.</p>
-
+        <p class="form-hint" style="margin-bottom:12px">This message appears on the booking page (Step 3) before the customer confirms. You can use <code style="color:var(--gold-light);font-family:monospace">&lt;strong&gt;bold&lt;/strong&gt;</code> and <code style="color:var(--gold-light);font-family:monospace">&lt;br&gt;</code> for line breaks.</p>
         <div class="form-group"><label class="form-label">Reservation Hold Duration (hours)</label>
           <input class="form-input" type="number" id="s-holdhours" value="${hrs}" min="1" max="24" oninput="updateNoticePreview()">
-          <div class="form-hint">How many hours you will hold the room pending payment. This appears in the notice and the success screen.</div>
+          <div class="form-hint">How many hours the room is held pending payment.</div>
         </div>
-
         <div class="form-group"><label class="form-label">Notice Message (HTML allowed)</label>
-          <textarea class="form-input" id="s-notice" rows="5" oninput="updateNoticePreview()">${notice.replace(/"/g,'&quot;')}</textarea>
+          <textarea class="form-input" id="s-notice" rows="6" oninput="updateNoticePreview()" style="word-wrap:break-word;white-space:pre-wrap;font-family:monospace;font-size:12px"></textarea>
         </div>
-
         <div class="form-label" style="margin-bottom:6px">Live Preview</div>
-        <div class="notice-preview" id="notice-preview">${notice}</div>
-
-        <button class="btn btn-outline btn-sm" onclick="document.getElementById('s-notice').value=${JSON.stringify(SETTINGS_DEFAULT.reservationNotice)};updateNoticePreview()">Reset to Default</button>
+        <div class="notice-preview" id="notice-preview"></div>
+        <button class="btn btn-outline btn-sm" onclick="resetNotice()">Reset to Default</button>
       </div>
-
       <div class="card">
-        <div class="card-title" style="color:var(--muted)">Staff Credentials</div>
-        <div class="sum-row"><span class="sum-key">admin</span><span class="sum-val"><span class="badge badge-admin">admin123</span> &nbsp; Administrator</span></div>
-        <div class="sum-row"><span class="sum-key">staff1</span><span class="sum-val"><span class="badge badge-gray">staff123</span> &nbsp; Amaka</span></div>
-        <div class="sum-row"><span class="sum-key">staff2</span><span class="sum-val"><span class="badge badge-gray">staff456</span> &nbsp; Chidi</span></div>
-        <p class="form-hint" style="margin-top:8px">Credentials are set in the source code. Contact your developer to add or change staff accounts.</p>
+        <div class="card-title" style="color:var(--muted)">Staff Accounts</div>
+        <div class="sum-row"><span class="sum-key">admin</span><span class="sum-val"><span class="badge badge-admin">Administrator</span></span></div>
+        <div class="sum-row"><span class="sum-key">staff1</span><span class="sum-val"><span class="badge badge-gray">Front Desk</span> &nbsp;Amaka</span></div>
+        <div class="sum-row"><span class="sum-key">staff2</span><span class="sum-val"><span class="badge badge-gray">Front Desk</span> &nbsp;Chidi</span></div>
+        <p class="form-hint" style="margin-top:8px">Passwords are stored securely in the source code. Contact your developer to add or change accounts.</p>
       </div>
-
       <div class="card" style="border-color:rgba(220,53,69,0.3)">
         <div class="card-title" style="color:#f87c7c">Danger Zone</div>
-        <button class="btn btn-danger" onclick="if(confirm('Delete ALL bookings?')){bookings=[];saveData();showToast('All bookings cleared');renderSettings()}">Clear All Bookings</button>
+        <button class="btn btn-danger" onclick="if(confirm('Delete ALL bookings? This cannot be undone.')){bookings=[];saveData();showToast('All bookings cleared');renderSettings()}">Clear All Bookings</button>
       </div>
-
       <button class="btn btn-gold btn-full" onclick="saveSettings()">Save All Settings →</button>
     </div>`;
+  // Set textarea value via DOM (not innerHTML) to avoid any HTML-escaping issues
+  const notice = settings.reservationNotice || SETTINGS_DEFAULT.reservationNotice;
+  document.getElementById('s-notice').value = notice;
   updateNoticePreview();
 }
 function updateNoticePreview(){
   const el=document.getElementById('s-notice');
   const prev=document.getElementById('notice-preview');
-  if(el&&prev)prev.innerHTML=el.value;
+  if(el&&prev) prev.innerHTML=el.value;
+}
+function resetNotice(){
+  const el=document.getElementById('s-notice');
+  if(el){ el.value=SETTINGS_DEFAULT.reservationNotice; updateNoticePreview(); }
 }
 async function saveSettings(){
   settings.hotelName   = document.getElementById('s-hotelname').value;
@@ -635,6 +940,23 @@ setInterval(()=>{
     if(b&&b.status==='confirmed'){const rem=b.checkoutTime-Date.now();el.textContent='⏱ '+fmtCD(Math.max(0,rem));const p=document.getElementById('prog-'+b.id);if(p)p.style.width=pct(b)+'%';}
   });
 },1000);
+
+// ─── SAVE PAGE ON NAVIGATE (so refresh restores same page) ──
+const _origNavigate=navigate;
+navigate=function(page){
+  currentPage=page;
+  saveSession(); // keep session current with latest page
+  _origNavigate(page);
+};
+
+// ─── AUTO-RESTORE SESSION ON PAGE LOAD ────────────
+// If sessionStorage has a valid session, skip the login screen entirely.
+(function(){
+  if(restoreSession()){
+    bootApp();
+  }
+  // else: login page is already visible by default (display:flex in HTML)
+})();
 </script>
 </body>
 </html>
