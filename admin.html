@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 <style>
-:root{--gold:#C9A84C;--gold-light:#E8C97A;--ink:#1C1C18;--ink2:#252520;--surface:#2E2E28;--surface2:#363630;--cream:#FAF7F2;--cream2:#D4CFC6;--muted:#8A8070;--muted2:#5E5A52;--border:rgba(201,168,76,0.28);--border2:rgba(255,255,255,0.10);--success:#198754;--danger:#dc3545;--radius:4px;--radius-lg:12px;--radius-xl:16px;--sidebar:220px}
+:root{--gold:#C9A84C;--gold-light:#E8C97A;--ink:#1C1A12;--ink2:#26231A;--surface:#302D22;--surface2:#38342A;--cream:#FAF7F2;--cream2:#D4CFC6;--muted:#8A8070;--muted2:#5E5A52;--border:rgba(201,168,76,0.28);--border2:rgba(255,255,255,0.10);--success:#198754;--danger:#dc3545;--radius:4px;--radius-lg:12px;--radius-xl:16px;--sidebar:220px}
 *{box-sizing:border-box;margin:0;padding:0}html,body{height:100%;overflow:hidden}
 body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--cream);font-size:14px}
 .app-shell{display:flex;height:100vh;overflow:hidden}
@@ -103,7 +103,7 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.5}
 .modal-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0;line-height:1}.modal-close:hover{color:var(--cream)}
 .modal-footer{display:flex;gap:8px;margin-top:20px;padding-top:16px;border-top:0.5px solid var(--border2)}
 .modal-footer .btn{flex:1}
-.login-shell{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#222218;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(201,168,76,0.04) 39px,rgba(201,168,76,0.04) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(201,168,76,0.04) 39px,rgba(201,168,76,0.04) 40px)}
+.login-shell{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#1E1B12;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(201,168,76,0.05) 39px,rgba(201,168,76,0.05) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(201,168,76,0.05) 39px,rgba(201,168,76,0.05) 40px)}
 .login-box{background:var(--ink2);border:0.5px solid var(--border);border-radius:var(--radius-xl);padding:40px 32px;width:100%;max-width:360px}
 .login-logo{text-align:center;margin-bottom:32px}
 .login-logo-name{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold);letter-spacing:1px}
@@ -218,14 +218,21 @@ textarea.form-input{resize:vertical;min-height:80px;line-height:1.5}
 
 <script>
 // ═══════════════════════════════════════════════════
-// CLOUD CONFIG — must match customer-booking.html
+// CLOUD CREDENTIALS — saved in localStorage via the
+// Settings → Cloud Sync panel. No code editing needed.
 // ═══════════════════════════════════════════════════
-const JSONBIN_BIN_ID  = '69c2a678b7ec241ddc9b811f';
-const JSONBIN_API_KEY = '$2a$10$l6KUW.fg.dsBkpZnjjouG.A3gmSzFOTd8ZzU6sYq.vCs.tX60EOPu';
-const BIN_URL = 'https://api.jsonbin.io/v3/b/' + JSONBIN_BIN_ID;
-const POLL_MS  = 15000;
+function getCreds(){ return { binId:localStorage.getItem('sic_bin_id')||'', apiKey:localStorage.getItem('sic_api_key')||'' }; }
+function saveCreds(binId,apiKey){ localStorage.setItem('sic_bin_id',binId.trim()); localStorage.setItem('sic_api_key',apiKey.trim()); }
+function configured(){ const c=getCreds(); return c.binId.length>10 && c.apiKey.length>10; }
+function binUrl(){ return `https://api.jsonbin.io/v3/b/${getCreds().binId}`; }
 
-const CREDENTIALS={admin:{pass:'admin123',role:'admin',name:'Administrator'},staff1:{pass:'staff123',role:'staff',name:'Amaka — Front Desk'},staff2:{pass:'staff456',role:'staff',name:'Chidi — Front Desk'}};
+const POLL_MS = 15000;
+const CREDENTIALS_DEFAULT={admin:{pass:'admin123',role:'admin',name:'Administrator'},staff1:{pass:'staff123',role:'staff',name:'Amaka — Front Desk'},staff2:{pass:'staff456',role:'staff',name:'Chidi — Front Desk'}};
+let CREDENTIALS=JSON.parse(localStorage.getItem('sic_credentials')||'null')||JSON.parse(JSON.stringify(CREDENTIALS_DEFAULT));
+function saveCredentials(){
+  localStorage.setItem('sic_credentials',JSON.stringify(CREDENTIALS));
+  saveData(); // push to cloud so all devices get the update
+}
 
 const ROOMS_DEFAULT=[
   {id:'manchester-united',name:'Manchester United',type:'lodging',  price:15000,duration:'Per Night',  checkIn:'2:00 PM',   checkOut:'12:00 PM',  desc:'A richly appointed lodging room radiating the spirit of champions. King-sized bed, climate control, en-suite bathroom, and premium toiletries.',color:'#8B0000',accent:'#cc0000',emoji:'⚽'},
@@ -243,127 +250,122 @@ let currentUser=null,currentRole=null,currentPage='overview';
 let editingRoomId=null,checkoutBookingId=null,pollTimer=null;
 
 // ─── SESSION PERSISTENCE ──────────────────────────
-// Saves login state to sessionStorage so a page refresh doesn't log the user out.
-// sessionStorage is cleared automatically when the browser tab is closed.
 function saveSession(){sessionStorage.setItem('sic_session',JSON.stringify({user:currentUser,role:currentRole,page:currentPage}));}
 function clearSession(){sessionStorage.removeItem('sic_session');}
 function restoreSession(){
   const raw=sessionStorage.getItem('sic_session');
   if(!raw)return false;
-  try{
-    const s=JSON.parse(raw);
-    if(!s.user||!CREDENTIALS[s.user])return false;
-    currentUser=s.user;currentRole=s.role;currentPage=s.page||'overview';
-    return true;
-  }catch(e){return false;}
+  try{const s=JSON.parse(raw);if(!s.user||!CREDENTIALS[s.user])return false;currentUser=s.user;currentRole=s.role;currentPage=s.page||'overview';return true;}
+  catch(e){return false;}
 }
 
-// ─── CLOUD ────────────────────────────────────────
-const configured=()=>JSONBIN_BIN_ID!=='PASTE_YOUR_BIN_ID_HERE'&&JSONBIN_API_KEY!=='PASTE_YOUR_API_KEY_HERE';
+// ── BroadcastChannel: instant sync between tabs on same PC ──
+const bc=(typeof BroadcastChannel!=='undefined')?new BroadcastChannel('sic_sync'):null;
+if(bc) bc.onmessage=e=>{
+  if(e.data?.type==='data_updated'){
+    const d=e.data.payload;
+    if(d.rooms?.length)rooms=d.rooms;
+    if(d.bookings)bookings=d.bookings;
+    if(d.settings)settings={...SETTINGS_DEFAULT,...d.settings};
+    lsSave();
+    updatePendingBadge();
+    if(currentPage==='overview'||currentPage==='rooms'||currentPage==='bookings') navigate(currentPage);
+  }
+};
+function broadcastUpdate(){
+  if(bc)bc.postMessage({type:'data_updated',payload:{rooms,bookings,settings}});
+}
 
-function setSyncStatus(state){
+// ─── SYNC STATUS ──────────────────────────────────
+function setSyncStatus(state,msg){
   const dot=document.getElementById('sync-dot'),lbl=document.getElementById('sync-label');
   if(!dot)return;
   dot.className='sync-dot'+(state==='syncing'?' syncing':state==='error'?' error':'');
-  lbl.textContent=state==='syncing'?'Syncing…':state==='error'?'Offline':'Live';
+  lbl.textContent=state==='syncing'?'Syncing…':state==='error'?(msg||'Offline'):'Live';
+  lbl.title=msg||'';
 }
 
+// ─── CLOUD CALLS ──────────────────────────────────
 async function cloudGet(){
   setSyncStatus('syncing');
-  const r=await fetch(BIN_URL+'/latest',{headers:{'X-Master-Key':JSONBIN_API_KEY,'X-Bin-Meta':'false'}});
+  const c=getCreds();
+  const r=await fetch(binUrl()+'/latest',{headers:{'X-Master-Key':c.apiKey,'X-Bin-Meta':'false'}});
+  if(r.status===401)throw new Error('401 — Wrong API key. Go to Settings → Cloud Sync and re-enter your JSONBin API key.');
+  if(r.status===404)throw new Error('404 — Bin not found. Check your Bin ID in Settings → Cloud Sync.');
   if(!r.ok)throw new Error('HTTP '+r.status);
   return r.json();
 }
 async function cloudPut(){
+  const c=getCreds();
   setSyncStatus('syncing');
-  await fetch(BIN_URL,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':JSONBIN_API_KEY},body:JSON.stringify({rooms,bookings,settings,schemaVersion:1})});
+  const r=await fetch(binUrl(),{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':c.apiKey},body:JSON.stringify({rooms,bookings,settings,credentials:CREDENTIALS,schemaVersion:1})});
+  if(!r.ok)throw new Error('HTTP '+r.status);
   setSyncStatus('ok');
 }
 
-async function loadData(){
-  if(!configured()){
+// ─── LOCAL STORAGE ────────────────────────────────
+function lsSave(){
+  localStorage.setItem('sic_rooms',JSON.stringify(rooms));
+  localStorage.setItem('sic_bookings',JSON.stringify(bookings));
+  localStorage.setItem('sic_settings',JSON.stringify(settings));
+}
+function lsLoad(){
+  try{
     const lr=localStorage.getItem('sic_rooms'),lb=localStorage.getItem('sic_bookings'),ls=localStorage.getItem('sic_settings');
-    if(lr)rooms=JSON.parse(lr); if(lb)bookings=JSON.parse(lb); if(ls)settings={...SETTINGS_DEFAULT,...JSON.parse(ls)};
-    setSyncStatus('error');showToast('⚠ Cloud not configured — data is device-local');return;
+    if(lr)rooms=JSON.parse(lr); if(lb)bookings=JSON.parse(lb);
+    if(ls)settings={...SETTINGS_DEFAULT,...JSON.parse(ls)};
+  }catch(e){}
+}
+
+// ─── LOAD / SAVE / POLL ───────────────────────────
+async function loadData(){
+  lsLoad(); // show cached data instantly
+  if(!configured()){
+    setSyncStatus('error','Not configured');
+    showToast('⚠ Cloud not set up. Go to Settings → Cloud Sync.');
+    return;
   }
   try{const d=await cloudGet();mergeData(d);setSyncStatus('ok');}
-  catch(e){setSyncStatus('error');showToast('Cloud unreachable — showing local cache');}
+  catch(e){setSyncStatus('error',e.message);showToast('⚠ '+e.message);}
   startPolling();
 }
 
 async function saveData(){
-  if(!configured()){localStorage.setItem('sic_rooms',JSON.stringify(rooms));localStorage.setItem('sic_bookings',JSON.stringify(bookings));localStorage.setItem('sic_settings',JSON.stringify(settings));return;}
-  try{await cloudPut();}catch(e){setSyncStatus('error');showToast('Save failed — check connection');}
+  lsSave();
+  broadcastUpdate();
+  if(!configured()){return;}
+  try{await cloudPut();}
+  catch(e){setSyncStatus('error',e.message);showToast('⚠ Save failed: '+e.message);}
 }
 
 function mergeData(d){
   if(d.rooms?.length)rooms=d.rooms;
   if(d.bookings)bookings=d.bookings;
   if(d.settings&&Object.keys(d.settings).length)settings={...SETTINGS_DEFAULT,...d.settings};
+  if(d.credentials&&Object.keys(d.credentials).length){
+    CREDENTIALS=d.credentials;
+    saveCredentials();
+  }
+  lsSave();
 }
 
-function startPolling() {
-    if (pollTimer) clearInterval(pollTimer);
-    pollTimer = setInterval(async () => {
-        if (!configured()) return;
-        
-        let needsSave = false; // A flag to check if we need to update the database
-        const now = Date.now();
-        const holdDurationMs = (settings.reservationHoldHours || 2) * 3600000;
-
-        // --- START: NEW AUTOMATIC EXPIRATION LOGIC ---
-        bookings.forEach(b => {
-            // Find pending bookings that are older than the hold duration
-            if (b.status === 'pending' && (now - b.createdAt) > holdDurationMs) {
-                b.status = 'expired'; // Change the status
-                needsSave = true;     // Mark that we need to save our changes
-            }
-        });
-
-        // If any bookings were changed to 'expired', save the data back to the cloud
-        if (needsSave) {
-            await saveData();
-            // We can optionally show a toast or log that we cleaned up expired bookings
-            console.log('Cleaned up and expired old pending bookings.');
-        }
-        // --- END: NEW AUTOMATIC EXPIRATION LOGIC ---
-
-        try {
-            const d = await cloudGet();
-            mergeData(d);
-            setSyncStatus('ok');
-            updatePendingBadge();
-            // live update countdowns without full re-render
-            document.querySelectorAll('[data-countdown]').forEach(el => {
-                const b = bookings.find(bk => bk.id === el.getAttribute('data-countdown'));
-                if (b && b.status === 'confirmed') {
-                    const rem = b.checkoutTime - Date.now();
-                    el.textContent = '' + fmtCD(Math.max(0, rem));
-                    const p = document.getElementById('prog-' + b.id);
-                    if (p) p.style.width = pct(b) + '%';
-                }
-            });
-        } catch (e) {
-            setSyncStatus('error');
-        }
-    }, POLL_MS);
+function startPolling(){
+  if(pollTimer)clearInterval(pollTimer);
+  pollTimer=setInterval(async()=>{
+    if(!configured())return;
+    try{
+      const d=await cloudGet();mergeData(d);setSyncStatus('ok');updatePendingBadge();
+      document.querySelectorAll('[data-countdown]').forEach(el=>{
+        const b=bookings.find(bk=>bk.id===el.getAttribute('data-countdown'));
+        if(b&&b.status==='confirmed'){const rem=b.checkoutTime-Date.now();el.textContent='⏱ '+fmtCD(Math.max(0,rem));const p=document.getElementById('prog-'+b.id);if(p)p.style.width=pct(b)+'%';}
+      });
+    }catch(e){setSyncStatus('error',e.message);}
+  },POLL_MS);
 }
+
 // ─── HELPERS ──────────────────────────────────────
 function getRoom(id){return rooms.find(r=>r.id===id);}
-function getActiveBooking(roomId) {
-    const now = Date.now();
-    // Get hold duration from settings (defaulting to 2 hours), and convert to milliseconds
-    const holdDurationMs = (settings.reservationHoldHours || 2) * 3600000; 
-
-    return bookings.find(b => 
-        b.roomId === roomId && (
-            // EITHER the room is actively confirmed...
-            (b.status === 'confirmed' && b.checkoutTime > now) ||
-            // OR the room has a pending payment that has NOT yet expired.
-            (b.status === 'pending' && (now - b.createdAt) < holdDurationMs)
-        )
-    );
-}
+function getActiveBooking(roomId){const now=Date.now();return bookings.find(b=>b.roomId===roomId&&b.status==='confirmed'&&b.checkoutTime>now);}
 function getPending(){return bookings.filter(b=>b.status==='pending').length;}
 function fmtNaira(n){return '₦'+Number(n).toLocaleString();}
 function fmtDate(ts){return ts?new Date(ts).toLocaleDateString('en-NG',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';}
@@ -372,7 +374,6 @@ function pct(b){return Math.max(0,Math.min(100,((Date.now()-b.checkinTime)/(b.ch
 function genRef(){return 'SIC'+Date.now().toString().slice(-8).toUpperCase();}
 function updatePendingBadge(){const n=getPending(),el=document.getElementById('pending-badge');if(el){el.textContent=n;el.style.display=n>0?'inline':'none';}}
 
-// ─── AUTH ─────────────────────────────────────────
 function bootApp(){
   document.getElementById('login-page').style.display='none';
   document.getElementById('app-shell').style.display='flex';
@@ -463,27 +464,16 @@ function renderRooms(){
 
 // ─── BOOKINGS ─────────────────────────────────────
 function renderBookings(){
-    document.getElementById('topbar-actions-slot').innerHTML=`<select id="bk-filter" onchange="renderBookings()" style="background:var(--surface);border:0.5px solid var(--border2);color:var(--cream);padding:6px 10px;border-radius:var(--radius);font-size:12px"><option value="all">All</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="checkedout">Checked Out</option></select>`;
-    const filter=document.getElementById('bk-filter')?.value||'all';
-    const sorted=[...bookings].sort((a,b)=>b.createdAt-a.createdAt);
-    const filtered=filter==='all'?sorted:sorted.filter(b=>b.status===filter);
-    const summary=['pending','confirmed','checkedout'].map(s=>`<span class="badge ${s==='confirmed'?'badge-green':s==='pending'?'badge-amber':'badge-blue'}" style="margin-right:6px">${s}: ${bookings.filter(b=>b.status===s).length}</span>`).join('');
-    if(!filtered.length){document.getElementById('main-content').innerHTML=`<div style="margin-bottom:12px">${summary}</div><p style="color:var(--muted);padding:20px 0">No bookings found.</p>`;return;}
-    
-    // This is the part that builds each row of the table
-    const rows=filtered.map(b=>`<tr><td><span style="font-family:monospace;font-size:11px;color:var(--gold)">${b.id}</span></td><td><strong style="color:var(--cream)">${b.guest}</strong><br><span style="color:var(--muted);font-size:11px">${b.phone}</span></td><td>${b.roomName}</td><td><strong style="color:var(--gold)">${fmtNaira(b.total)}</strong></td><td><span class="badge ${b.status==='confirmed'?'badge-green':b.status==='checkedout'?'badge-blue':b.status==='pending'?'badge-amber':'badge-gray'}">${b.status}</span></td><td><span class="badge ${b.walkIn?'badge-blue':'badge-gray'}">${b.walkIn?'Walk-in':'Online'}</span></td>
-    
-    <td>${fmtDate(b.createdAt)}</td> 
-    
-    <td style="white-space:nowrap"><button class="btn btn-ghost btn-sm" onclick="viewBooking('${b.id}')" style="margin-right:4px">View</button>${b.status==='pending'?`<button class="btn btn-success btn-sm" onclick="confirmPay('${b.id}')" style="margin-right:4px">√ Pay</button>`:''}${currentRole==='admin'?`<button class="btn btn-danger btn-sm" onclick="deleteBooking('${b.id}')">Del</button>`:''}</td></tr>`).join('');
-    
-    // And this is the part that builds the final HTML for the page
-    document.getElementById('main-content').innerHTML=`<div style="margin-bottom:16px">${summary}</div><div class="table-wrap"><table class="data-table"><thead><tr><th>Ref</th><th>Guest</th><th>Room</th><th>Amount</th><th>Status</th><th>Source</th>
-    
-    <th>Date & Time</th>
-    
-    <th>Actions</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  document.getElementById('topbar-actions-slot').innerHTML=`<select id="bk-filter" onchange="renderBookings()" style="background:var(--surface);border:0.5px solid var(--border2);color:var(--cream);padding:6px 10px;border-radius:var(--radius);font-size:12px"><option value="all">All</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="checkedout">Checked Out</option></select>`;
+  const filter=document.getElementById('bk-filter')?.value||'all';
+  const sorted=[...bookings].sort((a,b)=>b.createdAt-a.createdAt);
+  const filtered=filter==='all'?sorted:sorted.filter(b=>b.status===filter);
+  const summary=['pending','confirmed','checkedout'].map(s=>`<span class="badge ${s==='confirmed'?'badge-green':s==='pending'?'badge-amber':'badge-blue'}" style="margin-right:6px">${s}: ${bookings.filter(b=>b.status===s).length}</span>`).join('');
+  if(!filtered.length){document.getElementById('main-content').innerHTML=`<div style="margin-bottom:12px">${summary}</div><p style="color:var(--muted);padding:20px 0">No bookings found.</p>`;return;}
+  const rows=filtered.map(b=>`<tr><td><span style="font-family:monospace;font-size:11px;color:var(--gold)">${b.id}</span></td><td><strong style="color:var(--cream)">${b.guest}</strong><br><span style="color:var(--muted);font-size:11px">${b.phone}</span></td><td>${b.roomName}</td><td><strong style="color:var(--gold)">${fmtNaira(b.total)}</strong></td><td><span class="badge ${b.status==='confirmed'?'badge-green':b.status==='checkedout'?'badge-blue':b.status==='pending'?'badge-amber':'badge-gray'}">${b.status}</span></td><td><span class="badge ${b.walkIn?'badge-blue':'badge-gray'}">${b.walkIn?'Walk-in':'Online'}</span></td><td>${new Date(b.createdAt).toLocaleDateString('en-NG',{day:'2-digit',month:'short'})}</td><td style="white-space:nowrap"><button class="btn btn-ghost btn-sm" onclick="viewBooking('${b.id}')" style="margin-right:4px">View</button>${b.status==='pending'?`<button class="btn btn-success btn-sm" onclick="confirmPay('${b.id}')" style="margin-right:4px">✓ Pay</button>`:''}${currentRole==='admin'?`<button class="btn btn-danger btn-sm" onclick="deleteBooking('${b.id}')">Del</button>`:''}</td></tr>`).join('');
+  document.getElementById('main-content').innerHTML=`<div style="margin-bottom:16px">${summary}</div><div class="table-wrap"><table class="data-table"><thead><tr><th>Ref</th><th>Guest</th><th>Room</th><th>Amount</th><th>Status</th><th>Source</th><th>Date</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
+
 // ─── CHECK IN/OUT ─────────────────────────────────
 function renderCheckin(){
   document.getElementById('main-content').innerHTML=`<div style="max-width:480px"><div class="card"><div class="card-title">Look Up Booking</div><div class="form-group"><label class="form-label">Booking Reference</label><input class="form-input" id="ci-ref" placeholder="e.g. SIC12345678" style="text-transform:uppercase" onkeydown="if(event.key==='Enter')lookupBooking()"></div><button class="btn btn-gold" onclick="lookupBooking()">Search →</button></div><div id="ci-result" style="margin-top:16px"></div></div>`;
@@ -861,22 +851,42 @@ function renderSettings(){
         <button class="btn btn-outline btn-sm" onclick="resetNotice()">Reset to Default</button>
       </div>
       <div class="card">
-        <div class="card-title" style="color:var(--muted)">Staff Accounts</div>
-        <div class="sum-row"><span class="sum-key">admin</span><span class="sum-val"><span class="badge badge-admin">Administrator</span></span></div>
-        <div class="sum-row"><span class="sum-key">staff1</span><span class="sum-val"><span class="badge badge-gray">Front Desk</span> &nbsp;Amaka</span></div>
-        <div class="sum-row"><span class="sum-key">staff2</span><span class="sum-val"><span class="badge badge-gray">Front Desk</span> &nbsp;Chidi</span></div>
-        <p class="form-hint" style="margin-top:8px">Passwords are stored securely in the source code. Contact your developer to add or change accounts.</p>
+        <div class="card-title">Staff Management</div>
+        <div id="staff-list"></div>
+        <button class="btn btn-gold" style="margin-top:12px;width:100%" onclick="openAddStaff()">+ Add New Staff</button>
       </div>
+
+      <div class="card" style="border-color:rgba(201,168,76,0.4)">
+        <div class="card-title" style="color:var(--gold)">☁ Cloud Sync (JSONBin)</div>
+        <p class="form-hint" style="margin-bottom:14px">Paste your JSONBin credentials here so bookings sync between all devices in real time. Both this dashboard and the customer booking page read credentials from this same storage — you only need to enter them once here.<br><br>
+        Don't have credentials yet? Go to <strong style="color:var(--cream)">jsonbin.io</strong> → Sign up free → Create a Bin → copy the Bin ID and your API Key.</p>
+        <div id="sync-status-banner" style="margin-bottom:12px"></div>
+        <div class="form-group">
+          <label class="form-label">JSONBin Bin ID</label>
+          <input class="form-input" id="cs-binid" placeholder="e.g. 66a1b2c3d4e5f60012345678" value="${localStorage.getItem('sic_bin_id')||''}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">JSONBin API Key</label>
+          <input class="form-input" id="cs-apikey" placeholder="$2a$10$..." value="${localStorage.getItem('sic_api_key')||''}" type="password">
+          <div class="form-hint">Stored locally in your browser only. Never sent anywhere except to JSONBin.</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-gold" onclick="saveCloudCreds()">Save & Test Connection</button>
+          <button class="btn btn-ghost btn-sm" onclick="clearCloudCreds()">Clear</button>
+        </div>
+        <div id="cs-result" style="margin-top:10px"></div>
+      </div>
+
       <div class="card" style="border-color:rgba(220,53,69,0.3)">
         <div class="card-title" style="color:#f87c7c">Danger Zone</div>
         <button class="btn btn-danger" onclick="if(confirm('Delete ALL bookings? This cannot be undone.')){bookings=[];saveData();showToast('All bookings cleared');renderSettings()}">Clear All Bookings</button>
       </div>
       <button class="btn btn-gold btn-full" onclick="saveSettings()">Save All Settings →</button>
     </div>`;
-  // Set textarea value via DOM (not innerHTML) to avoid any HTML-escaping issues
   const notice = settings.reservationNotice || SETTINGS_DEFAULT.reservationNotice;
   document.getElementById('s-notice').value = notice;
   updateNoticePreview();
+  renderStaffList();
 }
 function updateNoticePreview(){
   const el=document.getElementById('s-notice');
@@ -886,6 +896,207 @@ function updateNoticePreview(){
 function resetNotice(){
   const el=document.getElementById('s-notice');
   if(el){ el.value=SETTINGS_DEFAULT.reservationNotice; updateNoticePreview(); }
+}
+
+// ─── STAFF MANAGEMENT ─────────────────────────────
+function renderStaffList(){
+  const cont=document.getElementById('staff-list');
+  if(!cont)return;
+  cont.innerHTML='';
+  Object.entries(CREDENTIALS).forEach(([username,data])=>{
+    const isAdmin=data.role==='admin';
+    const row=document.createElement('div');
+    row.className='card';
+    row.style.cssText='margin-bottom:8px;padding:12px 14px;background:var(--surface2)';
+    row.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--cream)">${data.name}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">
+            @${username} &nbsp;·&nbsp;
+            <span class="badge ${isAdmin?'badge-admin':'badge-blue'}">${isAdmin?'Admin':'Staff'}</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" onclick="openEditStaff('${username}')">Edit</button>
+          <button class="btn btn-ghost btn-sm" onclick="openChangePassword('${username}')">Password</button>
+          ${!isAdmin?`<button class="btn btn-danger btn-sm" onclick="deleteStaff('${username}')">Remove</button>`:''}
+        </div>
+      </div>`;
+    cont.appendChild(row);
+  });
+}
+
+function openAddStaff(){
+  const html=`
+    <div class="form-group"><label class="form-label">Full Name</label>
+      <input class="form-input" id="ns-name" placeholder="e.g. Ngozi — Front Desk"></div>
+    <div class="form-group"><label class="form-label">Username</label>
+      <input class="form-input" id="ns-user" placeholder="e.g. staff3">
+      <div class="form-hint">Lowercase letters only, no spaces. Used to log in.</div></div>
+    <div class="form-group"><label class="form-label">Password</label>
+      <input class="form-input" id="ns-pass" placeholder="Min. 6 characters" type="password"></div>
+    <div class="form-group"><label class="form-label">Role</label>
+      <select class="form-input" id="ns-role">
+        <option value="staff">Staff</option>
+        <option value="admin">Admin</option>
+      </select></div>
+    <div id="ns-err" class="alert alert-error" style="display:none"></div>`;
+  showStaffModal('Add New Staff', html, ()=>{
+    const name=document.getElementById('ns-name').value.trim();
+    const user=document.getElementById('ns-user').value.trim().toLowerCase().replace(/\s+/g,'');
+    const pass=document.getElementById('ns-pass').value;
+    const role=document.getElementById('ns-role').value;
+    const err=document.getElementById('ns-err');
+    if(!name){err.textContent='Please enter a full name.';err.style.display='block';return false;}
+    if(!user||user.length<2){err.textContent='Username must be at least 2 characters.';err.style.display='block';return false;}
+    if(CREDENTIALS[user]){err.textContent='That username already exists. Choose another.';err.style.display='block';return false;}
+    if(!pass||pass.length<6){err.textContent='Password must be at least 6 characters.';err.style.display='block';return false;}
+    CREDENTIALS[user]={pass,role,name};
+    saveCredentials();
+    renderStaffList();
+    showToast('Staff account created — @'+user);
+    return true;
+  });
+}
+
+function openEditStaff(username){
+  const data=CREDENTIALS[username];
+  if(!data)return;
+  const html=`
+    <div class="form-group"><label class="form-label">Full Name</label>
+      <input class="form-input" id="es-name" value="${data.name}"></div>
+    <div class="form-group"><label class="form-label">Username</label>
+      <input class="form-input" value="@${username}" disabled style="opacity:0.5">
+      <div class="form-hint">Username cannot be changed.</div></div>
+    ${username!=='admin'?`
+    <div class="form-group"><label class="form-label">Role</label>
+      <select class="form-input" id="es-role">
+        <option value="staff" ${data.role==='staff'?'selected':''}>Staff</option>
+        <option value="admin" ${data.role==='admin'?'selected':''}>Admin</option>
+      </select></div>`:''}
+    <div id="es-err" class="alert alert-error" style="display:none"></div>`;
+  showStaffModal('Edit: '+data.name, html, ()=>{
+    const name=document.getElementById('es-name').value.trim();
+    const err=document.getElementById('es-err');
+    if(!name){err.textContent='Name cannot be empty.';err.style.display='block';return false;}
+    CREDENTIALS[username].name=name;
+    if(username!=='admin'){
+      CREDENTIALS[username].role=document.getElementById('es-role').value;
+    }
+    saveCredentials();
+    renderStaffList();
+    showToast('Account updated — @'+username);
+    return true;
+  });
+}
+
+function openChangePassword(username){
+  const data=CREDENTIALS[username];
+  if(!data)return;
+  const isSelf=username===currentUser;
+  const html=`
+    <div style="margin-bottom:14px;padding:10px 12px;background:var(--surface2);border-radius:var(--radius);font-size:13px">
+      Changing password for <strong style="color:var(--cream)">${data.name}</strong> (@${username})
+    </div>
+    ${isSelf?`<div class="form-group"><label class="form-label">Current Password</label>
+      <input class="form-input" id="cp-current" type="password" placeholder="Enter your current password"></div>`:''}
+    <div class="form-group"><label class="form-label">New Password</label>
+      <input class="form-input" id="cp-new" type="password" placeholder="Min. 6 characters"></div>
+    <div class="form-group"><label class="form-label">Confirm New Password</label>
+      <input class="form-input" id="cp-confirm" type="password" placeholder="Repeat new password"></div>
+    <div id="cp-err" class="alert alert-error" style="display:none"></div>`;
+  showStaffModal('Change Password', html, ()=>{
+    const err=document.getElementById('cp-err');
+    if(isSelf){
+      const current=document.getElementById('cp-current').value;
+      if(current!==CREDENTIALS[username].pass){
+        err.textContent='Current password is incorrect.';err.style.display='block';return false;
+      }
+    }
+    const newPass=document.getElementById('cp-new').value;
+    const confirm=document.getElementById('cp-confirm').value;
+    if(!newPass||newPass.length<6){err.textContent='New password must be at least 6 characters.';err.style.display='block';return false;}
+    if(newPass!==confirm){err.textContent='Passwords do not match.';err.style.display='block';return false;}
+    CREDENTIALS[username].pass=newPass;
+    saveCredentials();
+    showToast('Password changed for @'+username);
+    return true;
+  });
+}
+
+function deleteStaff(username){
+  if(username==='admin'){showToast('The admin account cannot be deleted.');return;}
+  if(username===currentUser){showToast('You cannot delete your own account while logged in.');return;}
+  const data=CREDENTIALS[username];
+  if(!confirm('Remove staff account for '+data.name+' (@'+username+')?\n\nThis cannot be undone.'))return;
+  delete CREDENTIALS[username];
+  saveCredentials();
+  renderStaffList();
+  showToast('Staff account removed — @'+username);
+}
+
+function showStaffModal(title, bodyHtml, onConfirm){
+  const existing=document.getElementById('staff-action-modal');
+  if(existing)existing.remove();
+  const overlay=document.createElement('div');
+  overlay.className='overlay';
+  overlay.id='staff-action-modal';
+  overlay.style.display='flex';
+  overlay.innerHTML=`
+    <div class="modal" style="max-width:400px">
+      <div class="modal-title">${title}
+        <button class="modal-close" onclick="document.getElementById('staff-action-modal').remove()">✕</button>
+      </div>
+      ${bodyHtml}
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="document.getElementById('staff-action-modal').remove()">Cancel</button>
+        <button class="btn btn-gold" id="staff-modal-confirm">Save Changes</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  document.getElementById('staff-modal-confirm').onclick=()=>{
+    const success=onConfirm();
+    if(success)document.getElementById('staff-action-modal').remove();
+  };
+}
+
+async function saveCloudCreds(){
+  const binId  = document.getElementById('cs-binid').value.trim();
+  const apiKey = document.getElementById('cs-apikey').value.trim();
+  const res    = document.getElementById('cs-result');
+  if(!binId || binId.length < 10){ res.innerHTML='<div class="alert alert-error">Please enter a valid Bin ID.</div>'; return; }
+  if(!apiKey || apiKey.length < 10){ res.innerHTML='<div class="alert alert-error">Please enter a valid API Key.</div>'; return; }
+  res.innerHTML='<div class="alert alert-info">Testing connection…</div>';
+  saveCreds(binId, apiKey);
+  // Test the connection immediately
+  try{
+    const r=await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`,{
+      headers:{'X-Master-Key':apiKey,'X-Bin-Meta':'false'}
+    });
+    if(r.status===401){ res.innerHTML='<div class="alert alert-error">❌ 401 — Wrong API key. Please check and re-enter your key from jsonbin.io → API Keys.</div>'; return; }
+    if(r.status===404){ res.innerHTML='<div class="alert alert-error">❌ 404 — Bin not found. Please check the Bin ID from your JSONBin dashboard.</div>'; return; }
+    if(!r.ok){ res.innerHTML=`<div class="alert alert-error">❌ HTTP ${r.status} — Connection failed.</div>`; return; }
+    const data=await r.json();
+    mergeData(data);
+    setSyncStatus('ok');
+    startPolling();
+    res.innerHTML='<div class="alert alert-success">✓ Connected successfully! Cloud sync is now active. Bookings will sync across all devices.</div>';
+    showToast('Cloud sync enabled ✓');
+  } catch(e){
+    res.innerHTML=`<div class="alert alert-error">❌ Network error: ${e.message}. Make sure you are connected to the internet.</div>`;
+  }
+}
+
+function clearCloudCreds(){
+  if(!confirm('Remove cloud credentials? Data will only be saved on this device.')) return;
+  localStorage.removeItem('sic_bin_id');
+  localStorage.removeItem('sic_api_key');
+  setSyncStatus('error','Not configured');
+  document.getElementById('cs-binid').value='';
+  document.getElementById('cs-apikey').value='';
+  document.getElementById('cs-result').innerHTML='<div class="alert alert-info">Credentials cleared. Running in local-only mode.</div>';
+  if(pollTimer){clearInterval(pollTimer);pollTimer=null;}
 }
 async function saveSettings(){
   settings.hotelName   = document.getElementById('s-hotelname').value;
